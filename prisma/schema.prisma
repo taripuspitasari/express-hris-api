@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  email         String   @id @db.VarChar(100)
+  password      String   @db.VarChar(100)
+  name          String   @db.VarChar(100)
+  role          Role     @default(APPLICANT)
+  token         String?  @db.VarChar(100)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  department_id Int?
+
+  department   Department?   @relation(fields: [department_id], references: [id])
+  attendances  Attendance[]
+  leaves       Leave[]
+  applications Application[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  HR
+  EMPLOYEE
+  APPLICANT
+}
+
+model Department {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(100)
+
+  users       User[]
+  jobOpenings JobOpening[]
+
+  @@map("departments")
+}
+
+model Attendance {
+  id         Int       @id @default(autoincrement())
+  user_id    String    @db.VarChar(100)
+  check_in   DateTime  @default(now())
+  check_out  DateTime?
+  created_at DateTime  @default(now())
+
+  user User @relation(fields: [user_id], references: [email])
+
+  @@map("attendances")
+}
+
+model Leave {
+  id         Int         @id @default(autoincrement())
+  user_id    String      @db.VarChar(100)
+  start_date DateTime
+  end_date   DateTime
+  reason     String
+  status     LeaveStatus @default(PENDING)
+  type       LeaveType   @default(UNPAID)
+  createdAt  DateTime    @default(now())
+
+  user User @relation(fields: [user_id], references: [email])
+
+  @@map("leaves")
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LeaveType {
+  ANNUAL
+  SICK
+  UNPAID
+}
+
+model JobOpening {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String
+  department_id Int
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  department   Department    @relation(fields: [department_id], references: [id])
+  applications Application[]
+
+  @@map("job_openings")
+}
+
+model Application {
+  id         Int               @id @default(autoincrement())
+  user_id    String            @db.VarChar(100)
+  job_id     Int
+  resume     String?
+  status     ApplicationStatus @default(PENDING)
+  created_at DateTime          @default(now())
+
+  user User       @relation(fields: [user_id], references: [email])
+  job  JobOpening @relation(fields: [job_id], references: [id])
+
+  @@map("applications")
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
