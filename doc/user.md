@@ -2,9 +2,9 @@
 
 ## Register User
 
-Endpoint : POST /api/users
+**Endpoint:** `POST /api/users`
 
-Request Body :
+**Request Body:**
 
 ```json
 {
@@ -14,30 +14,33 @@ Request Body :
 }
 ```
 
-Response Body (success):
+**Response Body (success):**
 
 ```json
 {
   "data": {
+    "id": "uuid",
     "name": "Tari",
-    "email": "tari@gmail.com"
-  }
+    "email": "tari@gmail.com",
+    "role": "APPLICANT"
+  },
+  "message": "User successfully registered"
 }
 ```
 
-Response Body (failed):
+**Response Body (failed):**
 
 ```json
 {
-  "errors": "Name is required."
+  "errors": "Email is already taken."
 }
 ```
 
 ## Login User
 
-Endpoint : POST /api/users/login
+**Endpoint:** `POST /api/users/login`
 
-Request Body :
+**Request Body:**
 
 ```json
 {
@@ -46,97 +49,114 @@ Request Body :
 }
 ```
 
-Response Body (success):
+**Response Body (success):**
 
 ```json
 {
   "data": {
+    "id": "uuid",
     "name": "Tari",
     "email": "tari@gmail.com",
+    "role": "APPLICANT",
     "token": "uuid"
-  }
+  },
+  "message": "Login successful"
 }
 ```
 
-Response Body (failed):
+**Response Body (failed):**
 
 ```json
 {
-  "errors": "Invalid email or password."
+  "errors": ["Invalid email or password."]
 }
 ```
 
 ## Get User
 
-Endpoint : GET /api/users/current
+**Endpoint:** `GET /api/users/current`
 
-Request Header :
--X-API-TOKEN : token
+**Request Header:**
+X-API-TOKEN : token
 
-Response Body (success):
+**Response Body (success):**
 
 ```json
 {
   "data": {
+    "id": "uuid",
     "name": "Tari",
-    "email": "tari@gmail.com"
+    "email": "tari@gmail.com",
+    "role": "APPLICANT"
   }
 }
 ```
 
-Response Body (failed):
+**Response Body (failed):**
 
 ```json
 {
-  "errors": "Unauthorized."
+  "errors": ["Unauthorized."]
 }
 ```
 
 ## Update User
 
-Endpoint : PATCH /api/users/current
+**Endpoint:** `PATCH /api/users/current`
 
-Request Header :
--X-API-TOKEN : token
+**Request Header:** X-API-TOKEN : token
 
-Response Body (success):
+**Request Body:**
 
 ```json
 {
   "data": {
-    "name": "Tari",
-    "email": "tari@gmail.com"
+    "name": "New Name",
+    "password": "newpassword"
   }
 }
 ```
 
-Response Body (failed):
+**Response Body (success):**
 
 ```json
 {
-  "errors": "Unauthorized."
+  "data": {
+    "id": "user-uuid",
+    "email": "tari@gmail.com",
+    "name": "New Name",
+    "role": "APPLICANT"
+  }
+}
+```
+
+**Response Body (failed):**
+
+```json
+{
+  "errors": "Unauthorized. Token is missing."
 }
 ```
 
 ## Logout User
 
-Endpoint : DELETE /api/users/current
+**Endpoint:** `DELETE /api/users/current`
 
-Request Header :
--X-API-TOKEN : token
+**Request Header:**
+X-API-TOKEN : token
 
-Response Body (success):
+**Response Body (success):**
 
 ```json
 {
-  "data": "OK"
+  "data": "Successfully logged out."
 }
 ```
 
-Response Body (failed):
+**Response Body (failed):**
 
 ```json
 {
-  "errors": "Unauthorized."
+  "errors": ["Unauthorized."]
 }
 ```
