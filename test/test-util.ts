@@ -3,16 +3,27 @@ import bcrypt from "bcrypt";
 import {User} from "@prisma/client";
 
 export class UserTest {
+  static userId: string | null = null;
+
   static async delete() {
-    await prismaClient.user.deleteMany({
-      where: {
-        email: "test@gmail.com", // Ganti pencarian ID dengan email untuk memastikan data yang benar dihapus
-      },
-    });
+    if (this.userId) {
+      await prismaClient.user.deleteMany({
+        where: {
+          id: this.userId,
+        },
+      });
+      this.userId = null;
+    } else {
+      await prismaClient.user.deleteMany({
+        where: {
+          email: "test@gmail.com",
+        },
+      });
+    }
   }
 
   static async create() {
-    await prismaClient.user.create({
+    const user = await prismaClient.user.create({
       data: {
         name: "test",
         email: "test@gmail.com",
@@ -20,17 +31,25 @@ export class UserTest {
         token: "test",
       },
     });
+
+    this.userId = user.id;
   }
 
   static async get(): Promise<User> {
-    const user = await prismaClient.user.findFirst({
+    if (!this.userId) {
+      throw new Error("User ID is not set.");
+    }
+
+    const user = await prismaClient.user.findUnique({
       where: {
-        email: "test@gmail.com", // Cari berdasarkan email, bukan ID hardcoded
+        id: this.userId,
       },
     });
+
     if (!user) {
       throw new Error("User is not found.");
     }
+
     return user;
   }
 }

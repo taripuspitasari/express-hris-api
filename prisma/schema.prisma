@@ -20,9 +20,9 @@ model User {
   name          String   @db.VarChar(100)
   role          Role     @default(APPLICANT)
   token         String?  @db.VarChar(100)
+  department_id Int?
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
-  department_id Int?
 
   department   Department?   @relation(fields: [department_id], references: [id])
   attendances  Attendance[]
@@ -40,18 +40,19 @@ enum Role {
 }
 
 model Department {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(100)
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  created_at DateTime @default(now())
 
-  users       User[]
-  jobOpenings JobOpening[]
+  users User[]
+  jobs  Job[]
 
   @@map("departments")
 }
 
 model Attendance {
   id         Int       @id @default(autoincrement())
-  user_id    String    @db.VarChar(36)
+  user_id    String
   check_in   DateTime  @default(now())
   check_out  DateTime?
   created_at DateTime  @default(now())
@@ -63,13 +64,14 @@ model Attendance {
 
 model Leave {
   id         Int         @id @default(autoincrement())
-  user_id    String      @db.VarChar(36)
+  user_id    String
   start_date DateTime
   end_date   DateTime
   reason     String
   status     LeaveStatus @default(PENDING)
   type       LeaveType   @default(UNPAID)
-  createdAt  DateTime    @default(now())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
 
   user User @relation(fields: [user_id], references: [id])
 
@@ -88,10 +90,10 @@ enum LeaveType {
   UNPAID
 }
 
-model JobOpening {
+model Job {
   id            Int      @id @default(autoincrement())
   title         String
-  description   String
+  description   String   @db.Text
   department_id Int
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
@@ -99,19 +101,20 @@ model JobOpening {
   department   Department    @relation(fields: [department_id], references: [id])
   applications Application[]
 
-  @@map("job_openings")
+  @@map("jobs")
 }
 
 model Application {
   id         Int               @id @default(autoincrement())
-  user_id    String            @db.VarChar(36)
+  user_id    String
   job_id     Int
-  resume     String?
+  resume     String?           @db.VarChar(255)
   status     ApplicationStatus @default(PENDING)
   created_at DateTime          @default(now())
+  updated_at DateTime          @updatedAt
 
-  user User       @relation(fields: [user_id], references: [id])
-  job  JobOpening @relation(fields: [job_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+  job  Job  @relation(fields: [job_id], references: [id])
 
   @@map("applications")
 }

@@ -195,6 +195,20 @@ describe("PATCH /api/users/current", () => {
     const user = await UserTest.get();
     expect(await bcrypt.compare("updatePassword", user.password)).toBe(true);
   });
+
+  it("should be able to update user email", async () => {
+    const response = await supertest(web)
+      .patch("/api/users/current")
+      .set("X-API-TOKEN", "test")
+      .send({
+        email: "updateEmail@gmail.com",
+      });
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+
+    expect(response.body.data.email).toBe("updateEmail@gmail.com");
+  });
 });
 
 describe("DELETE /api/users/current", () => {

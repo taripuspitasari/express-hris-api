@@ -25,6 +25,7 @@ export type UpdateUserRequest = {
   email?: string;
 };
 
+// memformat data user sebelum dikirim sbg response api
 export function toUserResponse(user: User): UserResponse {
   return {
     id: user.id,
