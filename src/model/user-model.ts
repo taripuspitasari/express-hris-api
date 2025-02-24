@@ -1,10 +1,10 @@
-import {User} from "@prisma/client";
+import {User, Role} from "@prisma/client";
 
 export type UserResponse = {
   id: string;
   email: string;
   name: string;
-  role: string;
+  role: Role;
   token?: string;
 };
 

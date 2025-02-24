@@ -68,7 +68,7 @@
 
 ```json
 {
-  "errors": ["Invalid email or password."]
+  "errors": "Invalid email or password."
 }
 ```
 
@@ -96,7 +96,7 @@ X-API-TOKEN : token
 
 ```json
 {
-  "errors": ["Unauthorized."]
+  "errors": "Unauthorized."
 }
 ```
 
@@ -104,7 +104,8 @@ X-API-TOKEN : token
 
 **Endpoint:** `PATCH /api/users/current`
 
-**Request Header:** X-API-TOKEN : token
+**Request Header:**
+X-API-TOKEN : token
 
 **Request Body:**
 
@@ -112,7 +113,8 @@ X-API-TOKEN : token
 {
   "data": {
     "name": "New Name",
-    "password": "newpassword"
+    "password": "newpassword",
+    "email": "newemail@gmail.com"
   }
 }
 ```
@@ -123,7 +125,7 @@ X-API-TOKEN : token
 {
   "data": {
     "id": "user-uuid",
-    "email": "tari@gmail.com",
+    "email": "newemail@gmail.com",
     "name": "New Name",
     "role": "APPLICANT"
   }
@@ -157,6 +159,6 @@ X-API-TOKEN : token
 
 ```json
 {
-  "errors": ["Unauthorized."]
+  "errors": "Unauthorized."
 }
 ```

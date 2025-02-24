@@ -53,3 +53,17 @@ export class UserTest {
     return user;
   }
 }
+
+export class JobTest {
+  static async deleteAll() {
+    if (!UserTest.userId) {
+      throw new Error("User ID is not set.");
+    }
+
+    await prismaClient.job.deleteMany({
+      where: {
+        user_id: UserTest.userId,
+      },
+    });
+  }
+}
