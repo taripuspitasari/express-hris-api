@@ -34,6 +34,20 @@ export type CreateJobRequest = {
   expiry_date?: string;
 };
 
+export type UpdateJobRequest = {
+  id: number;
+  title: string;
+  description: string;
+  status: JobStatus;
+  job_type: JobType;
+  workplace_type: WorkplaceType;
+  experience_level: ExperienceLevel;
+  location?: string;
+  salary_range?: string;
+  expiry_date?: string;
+  user_id: string;
+};
+
 export function toJobResponse(job: Job): JobResponse {
   return {
     id: job.id,

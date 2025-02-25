@@ -1,6 +1,6 @@
 import {prismaClient} from "../src/application/database";
 import bcrypt from "bcrypt";
-import {User} from "@prisma/client";
+import {User, Job} from "@prisma/client";
 
 export class UserTest {
   static userId: string | null = null;
@@ -55,6 +55,7 @@ export class UserTest {
 }
 
 export class JobTest {
+  static jobId: number | null = null;
   static async deleteAll() {
     if (!UserTest.userId) {
       throw new Error("User ID is not set.");
@@ -65,5 +66,47 @@ export class JobTest {
         user_id: UserTest.userId,
       },
     });
+  }
+
+  static async create() {
+    if (!UserTest.userId) {
+      throw new Error("User ID is not set or is null.");
+    }
+
+    const job = await prismaClient.job.create({
+      data: {
+        title: "Software Engineer",
+        description:
+          "Responsible for developing web applications using JavaScript and TypeScript.",
+        status: "OPEN",
+        job_type: "FULL_TIME",
+        workplace_type: "REMOTE",
+        experience_level: "JUNIOR",
+        location: "Jakarta, Indonesia",
+        salary_range: "Rp10.000.000 - Rp15.000.000",
+        expiry_date: "2025-03-15T23:59:59.999Z",
+        user_id: UserTest.userId,
+      },
+    });
+
+    this.jobId = job.id;
+  }
+
+  static async get(): Promise<Job> {
+    if (!UserTest.userId) {
+      throw new Error("User ID is not set or is null.");
+    }
+
+    const job = await prismaClient.job.findFirst({
+      where: {
+        user_id: UserTest.userId,
+      },
+    });
+
+    if (!job) {
+      throw new Error("Job is not found");
+    }
+
+    return job;
   }
 }
