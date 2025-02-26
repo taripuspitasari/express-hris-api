@@ -2,6 +2,7 @@ import {Job, User} from "@prisma/client";
 import {
   CreateJobRequest,
   JobResponse,
+  SearchJobRequest,
   toJobResponse,
   UpdateJobRequest,
 } from "../model/job-model";
@@ -9,6 +10,7 @@ import {JobValidation} from "../validation/job-validation";
 import {Validation} from "../validation/validation";
 import {prismaClient} from "../application/database";
 import {ResponseError} from "../error/response-error";
+import {Pageable} from "../model/page";
 
 export class JobService {
   static async create(
@@ -88,5 +90,54 @@ export class JobService {
     });
 
     return toJobResponse(job);
+  }
+
+  static async search(
+    request: SearchJobRequest
+  ): Promise<Pageable<JobResponse>> {
+    const searchRequest = Validation.validate(JobValidation.SEARCH, request);
+    const skip = (searchRequest.page - 1) * searchRequest.size;
+
+    const filters: any = {};
+    if (searchRequest.title) {
+      filters.title = {contains: searchRequest.title};
+    }
+
+    if (searchRequest.job_type) {
+      filters.job_type = {equals: searchRequest.job_type};
+    }
+
+    if (searchRequest.workplace_type) {
+      filters.workplace_type = {equals: searchRequest.workplace_type};
+    }
+
+    if (searchRequest.experience_level) {
+      filters.experience_level = {equals: searchRequest.experience_level};
+    }
+
+    if (searchRequest.location) {
+      filters.location = {contains: searchRequest.location};
+    }
+
+    console.log("Filters:", filters);
+
+    const jobs = await prismaClient.job.findMany({
+      where: filters,
+      take: searchRequest.size,
+      skip: skip,
+    });
+
+    const total = await prismaClient.job.count({
+      where: filters,
+    });
+
+    return {
+      data: jobs.map(job => toJobResponse(job)),
+      paging: {
+        current_page: searchRequest.page,
+        total_page: Math.ceil(total / searchRequest.size),
+        size: searchRequest.size,
+      },
+    };
   }
 }

@@ -254,3 +254,141 @@ describe("DELETE /api/jobs/:jobId", () => {
     expect(response.body.errors).toBeDefined();
   });
 });
+
+describe("GET /api/jobs", () => {
+  beforeEach(async () => {
+    await UserTest.create();
+    await JobTest.create();
+  });
+
+  afterEach(async () => {
+    await JobTest.deleteAll();
+    await UserTest.delete();
+  });
+
+  it("should be able to search jobs", async () => {
+    const response = await supertest(web)
+      .get("/api/jobs")
+      .set("X-API-TOKEN", "test");
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  });
+
+  it("should be able to search job using title", async () => {
+    const response = await supertest(web)
+      .get("/api/jobs")
+      .query({
+        title: "Software",
+      })
+      .set("X-API-TOKEN", "test");
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  });
+
+  it("should be able to search job using location", async () => {
+    const response = await supertest(web)
+      .get("/api/jobs")
+      .query({
+        location: "Jakarta",
+      })
+      .set("X-API-TOKEN", "test");
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  });
+
+  it("should be able to search job using job type", async () => {
+    const response = await supertest(web)
+      .get("/api/jobs")
+      .query({
+        job_type: "FULL_TIME",
+      })
+      .set("X-API-TOKEN", "test");
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  });
+
+  it("should be able to search job using workplace type", async () => {
+    const response = await supertest(web)
+      .get("/api/jobs")
+      .query({
+        workplace_type: "REMOTE",
+      })
+      .set("X-API-TOKEN", "test");
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  });
+
+  it("should be able to search job using experience level", async () => {
+    const response = await supertest(web)
+      .get("/api/jobs")
+      .query({
+        experience_level: "JUNIOR",
+      })
+      .set("X-API-TOKEN", "test");
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(10);
+  });
+
+  it("should be able to search job no result", async () => {
+    const response = await supertest(web)
+      .get("/api/jobs")
+      .query({
+        title: "salah",
+      })
+      .set("X-API-TOKEN", "test");
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(0);
+    expect(response.body.paging.current_page).toBe(1);
+    expect(response.body.paging.total_page).toBe(0);
+    expect(response.body.paging.size).toBe(10);
+  });
+
+  it("should be able to search job with paging", async () => {
+    const response = await supertest(web)
+      .get("/api/jobs")
+      .query({
+        page: 2,
+        size: 1,
+      })
+      .set("X-API-TOKEN", "test");
+
+    logger.debug(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.data.length).toBe(0);
+    expect(response.body.paging.current_page).toBe(2);
+    expect(response.body.paging.total_page).toBe(1);
+    expect(response.body.paging.size).toBe(1);
+  });
+});

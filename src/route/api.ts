@@ -16,3 +16,4 @@ apiRouter.post("/api/jobs", JobController.create);
 apiRouter.get("/api/jobs/:jobId(\\d+)", JobController.get);
 apiRouter.put("/api/jobs/:jobId(\\d+)", JobController.update);
 apiRouter.delete("/api/jobs/:jobId(\\d+)", JobController.remove);
+apiRouter.get("/api/jobs", JobController.search);

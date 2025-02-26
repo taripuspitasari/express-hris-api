@@ -1,7 +1,12 @@
 import {NextFunction, Response} from "express";
 import {UserRequest} from "../type/user-request";
-import {CreateJobRequest, UpdateJobRequest} from "../model/job-model";
+import {
+  CreateJobRequest,
+  SearchJobRequest,
+  UpdateJobRequest,
+} from "../model/job-model";
 import {JobService} from "../service/job-service";
+import {ExperienceLevel, JobType, WorkplaceType} from "@prisma/client";
 
 export class JobController {
   static async create(req: UserRequest, res: Response, next: NextFunction) {
@@ -50,6 +55,24 @@ export class JobController {
       res.status(200).json({
         message: "Job successfully deleted.",
       });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async search(req: UserRequest, res: Response, next: NextFunction) {
+    try {
+      const request: SearchJobRequest = {
+        title: req.query.title as string,
+        job_type: req.query.job_type as JobType,
+        workplace_type: req.query.workplace_type as WorkplaceType,
+        experience_level: req.query.experience_level as ExperienceLevel,
+        location: req.query.location as string,
+        page: req.query.page ? Number(req.query.page) : 1,
+        size: req.query.size ? Number(req.query.size) : 10,
+      };
+      const response = await JobService.search(request);
+      res.status(200).json(response);
     } catch (e) {
       next(e);
     }

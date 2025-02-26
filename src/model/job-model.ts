@@ -48,6 +48,16 @@ export type UpdateJobRequest = {
   user_id: string;
 };
 
+export type SearchJobRequest = {
+  title?: string;
+  job_type?: JobType | undefined;
+  workplace_type?: WorkplaceType | undefined;
+  experience_level?: ExperienceLevel | undefined;
+  location?: string;
+  page: number;
+  size: number;
+};
+
 export function toJobResponse(job: Job): JobResponse {
   return {
     id: job.id,
