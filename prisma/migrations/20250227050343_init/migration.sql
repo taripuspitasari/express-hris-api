@@ -75,7 +75,7 @@ CREATE TABLE `applications` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `user_id` VARCHAR(191) NOT NULL,
     `job_id` INTEGER NOT NULL,
-    `resume` VARCHAR(255) NULL,
+    `resume` VARCHAR(255) NOT NULL,
     `status` ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL DEFAULT 'PENDING',
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,

@@ -36,16 +36,16 @@ export type CreateJobRequest = {
 
 export type UpdateJobRequest = {
   id: number;
-  title: string;
-  description: string;
-  status: JobStatus;
-  job_type: JobType;
-  workplace_type: WorkplaceType;
-  experience_level: ExperienceLevel;
+  title?: string;
+  description?: string;
+  status?: JobStatus;
+  job_type?: JobType;
+  workplace_type?: WorkplaceType;
+  experience_level?: ExperienceLevel;
   location?: string;
   salary_range?: string;
   expiry_date?: string;
-  user_id: string;
+  user_id?: string;
 };
 
 export type SearchJobRequest = {

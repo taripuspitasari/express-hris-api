@@ -58,15 +58,6 @@ export class JobService {
     request: UpdateJobRequest
   ): Promise<JobResponse> {
     const updateRequest = Validation.validate(JobValidation.UPDATE, request);
-    // const jobExist = await prismaClient.job.findUnique({
-    //   where: {
-    //     id: updateRequest.id,
-    //     user_id: user.id,
-    //   },
-    // });
-    // if (!jobExist) {
-    //   throw new ResponseError(404, "Job is not found!");
-    // }
     await this.checkJobExist(user.id, updateRequest.id);
 
     const job = await prismaClient.job.update({

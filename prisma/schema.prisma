@@ -143,7 +143,7 @@ model Application {
   id         Int               @id @default(autoincrement())
   user_id    String
   job_id     Int
-  resume     String?           @db.VarChar(255)
+  resume     String            @db.VarChar(255)
   status     ApplicationStatus @default(PENDING)
   created_at DateTime          @default(now())
   updated_at DateTime          @updatedAt

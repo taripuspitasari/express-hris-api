@@ -1,6 +1,6 @@
 import {prismaClient} from "../src/application/database";
 import bcrypt from "bcrypt";
-import {User, Job} from "@prisma/client";
+import {User, Job, Application} from "@prisma/client";
 
 export class UserTest {
   static userId: string | null = null;
@@ -108,5 +108,69 @@ export class JobTest {
     }
 
     return job;
+  }
+}
+
+export class ApplicationTest {
+  static applicationId: number | null = null;
+
+  static async deleteAll() {
+    if (!UserTest.userId) {
+      throw new Error("User ID is not set.");
+    }
+
+    if (!JobTest.jobId) {
+      throw new Error("Job ID is not set.");
+    }
+
+    await prismaClient.application.deleteMany({
+      where: {
+        user_id: UserTest.userId,
+        job_id: JobTest.jobId,
+      },
+    });
+  }
+
+  static async create() {
+    if (!UserTest.userId) {
+      throw new Error("User ID is not set.");
+    }
+
+    if (!JobTest.jobId) {
+      throw new Error("Job ID is not set.");
+    }
+
+    const application = await prismaClient.application.create({
+      data: {
+        resume: "se123.pdf",
+        job_id: JobTest.jobId,
+        user_id: UserTest.userId,
+      },
+    });
+
+    this.applicationId = application.id;
+  }
+
+  static async get(): Promise<Application> {
+    if (!UserTest.userId) {
+      throw new Error("User ID is not set.");
+    }
+
+    if (!JobTest.jobId) {
+      throw new Error("Job ID is not set.");
+    }
+
+    const application = await prismaClient.application.findFirst({
+      where: {
+        user_id: UserTest.userId,
+        job_id: JobTest.jobId,
+      },
+    });
+
+    if (!application) {
+      throw new Error("Application is not found");
+    }
+
+    return application;
   }
 }
