@@ -18,6 +18,7 @@ Response Body (success) :
 
 ```json
 {
+  "id": 1,
   "email": "janedoe@gmail.com",
   "name": "Jane Doe",
   "role": "employee"
@@ -49,6 +50,7 @@ Response Body (success) :
 
 ```json
 {
+  "id": 1,
   "email": "janedoe@gmail.com",
   "name": "Jane Doe",
   "role": "employee",
@@ -76,6 +78,7 @@ Response Body (success) :
 
 ```json
 {
+  "id": 1,
   "email": "janedoe@gmail.com",
   "name": "Jane Doe",
   "role": "employee"
@@ -101,6 +104,7 @@ Request Body:
 
 ```json
 {
+  "email": "janedoeupdate@gmail.com",
   "password": "secretkeyupdate",
   "name": "Jane Doe update",
   "role": "applicant"
@@ -111,7 +115,8 @@ Response Body (success) :
 
 ```json
 {
-  "email": "janedoe@gmail.com",
+  "id": 1,
+  "email": "janedoeupdate@gmail.com",
   "name": "Jane Doe update",
   "role": "applicant"
 }
