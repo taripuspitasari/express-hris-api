@@ -15,12 +15,24 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String
-  name     String
-  role     String
-  token    String?
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
+  password    String
+  name        String
+  role        String
+  token       String?
+  attendances Attendance[]
 
   @@map("users")
+}
+
+model Attendance {
+  id             Int       @id @default(autoincrement())
+  user_id        Int
+  user           User      @relation(fields: [user_id], references: [id])
+  check_in_time  DateTime
+  check_out_time DateTime?
+  date           DateTime
+
+  @@map("attendances")
 }

@@ -15,7 +15,7 @@ export class UserTest {
     await prismaClient.user.create({
       data: {
         email: "test@gmail.com",
-        password: await bcrypt.hash("test", 10),
+        password: await bcrypt.hash("test_123", 10),
         name: "test",
         role: "applicant",
         token: "test",
@@ -41,6 +41,26 @@ export class UserTest {
     await prismaClient.user.deleteMany({
       where: {
         token: "test",
+      },
+    });
+  }
+}
+
+export class AttendanceTest {
+  static async deleteAll(userId: number) {
+    await prismaClient.attendance.deleteMany({
+      where: {
+        user_id: userId,
+      },
+    });
+  }
+
+  static async checkIn(currentUser: User) {
+    await prismaClient.attendance.create({
+      data: {
+        user_id: currentUser.id,
+        check_in_time: new Date(),
+        date: new Date(new Date().toISOString().split("T")[0]),
       },
     });
   }

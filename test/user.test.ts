@@ -11,7 +11,7 @@ describe("POST /api/users", () => {
   it("should create a new user and return 201 with user data", async () => {
     const response = await supertest(web).post("/api/users").send({
       email: "test@gmail.com",
-      password: "test",
+      password: "test_123",
       name: "test",
     });
 
@@ -49,7 +49,7 @@ describe("POST /api/users/login", () => {
   it("should return 200 and a token when credentials are valid", async () => {
     const response = await supertest(web).post("/api/users/login").send({
       email: "test@gmail.com",
-      password: "test",
+      password: "test_123",
     });
 
     logger.debug(response.body);
@@ -65,7 +65,7 @@ describe("POST /api/users/login", () => {
   it("should return 401 when email does not exist", async () => {
     const response = await supertest(web).post("/api/users/login").send({
       email: "wrong@gmail.com",
-      password: "test",
+      password: "test_salah",
     });
 
     logger.debug(response.body);
@@ -76,7 +76,7 @@ describe("POST /api/users/login", () => {
   it("should return 401 when password is incorrect", async () => {
     const response = await supertest(web).post("/api/users/login").send({
       email: "test@gmail.com",
-      password: "wrong",
+      password: "wrong_123",
     });
 
     logger.debug(response.body);
