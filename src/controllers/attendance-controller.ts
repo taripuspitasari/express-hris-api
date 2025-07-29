@@ -37,4 +37,15 @@ export class AttendanceController {
       next(err);
     }
   }
+
+  static async get(req: UserRequest, res: Response, next: NextFunction) {
+    try {
+      const response = await AttendanceService.get(req.user!);
+      res.status(200).json({
+        data: response,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }

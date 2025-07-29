@@ -33,7 +33,7 @@ describe("POST /api/attendance/check-in", () => {
       .post("/api/attendance/check-in")
       .set("Authorization", "wrong");
 
-    logger.debug(response.body);
+    logger.debug(response.body.data);
     expect(response.status).toBe(401);
     expect(response.body.errors).toBeDefined();
   });
@@ -97,5 +97,40 @@ describe("GET /api/attendance/history", () => {
     logger.debug(response.body);
     expect(response.status).toBe(200);
     expect(response.body.data.length).toBe(1);
+  });
+});
+
+describe("GET /api/attendance", () => {
+  let currentUser: User;
+
+  beforeEach(async () => {
+    await UserTest.create();
+    currentUser = await UserTest.get();
+  });
+
+  afterEach(async () => {
+    await AttendanceTest.deleteAll(currentUser.id);
+    await UserTest.delete();
+  });
+
+  it("should return 200 and include today's attendance when user has checked in", async () => {
+    await AttendanceTest.checkIn(currentUser);
+    const response = await supertest(web)
+      .get("/api/attendance")
+      .set("Authorization", "test");
+
+    logger.debug(response.body.data);
+    expect(response.status).toBe(200);
+    expect(response.body.data).toBeDefined();
+  });
+
+  it("should return 200 and null data when user has not checked in today", async () => {
+    const response = await supertest(web)
+      .get("/api/attendance")
+      .set("Authorization", "test");
+
+    logger.debug(response.body.data);
+    expect(response.status).toBe(200);
+    expect(response.body.data).toBeDefined();
   });
 });

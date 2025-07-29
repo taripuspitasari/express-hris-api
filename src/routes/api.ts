@@ -12,3 +12,4 @@ apiRouter.delete("/api/users/current", UserController.logout);
 apiRouter.post("/api/attendance/check-in", AttendanceController.checkIn);
 apiRouter.post("/api/attendance/check-out", AttendanceController.checkOut);
 apiRouter.get("/api/attendance/history", AttendanceController.history);
+apiRouter.get("/api/attendance", AttendanceController.get);

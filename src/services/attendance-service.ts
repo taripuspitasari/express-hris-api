@@ -67,4 +67,18 @@ export class AttendanceService {
 
     return attendances.map(attendance => toAttendanceResponse(attendance));
   }
+
+  static async get(user: User): Promise<AttendanceResponse | null> {
+    const today = new Date(new Date().toISOString().split("T")[0]);
+    const attendance = await prismaClient.attendance.findFirst({
+      where: {
+        user_id: user.id,
+        date: today,
+      },
+    });
+
+    if (!attendance) return null;
+
+    return toAttendanceResponse(attendance);
+  }
 }
