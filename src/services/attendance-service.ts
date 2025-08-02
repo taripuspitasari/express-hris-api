@@ -13,7 +13,6 @@ export class AttendanceService {
       where: {
         user_id: user.id,
         date: today,
-        check_out_time: null,
       },
     });
 
