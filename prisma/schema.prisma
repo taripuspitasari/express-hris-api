@@ -36,3 +36,11 @@ model Attendance {
 
   @@map("attendances")
 }
+
+model Department {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  description String @db.Text
+
+  @@map("departments")
+}

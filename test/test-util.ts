@@ -65,3 +65,32 @@ export class AttendanceTest {
     });
   }
 }
+
+export class DepartmentTest {
+  static async create() {
+    await prismaClient.department.create({
+      data: {
+        name: "HR",
+        description: "Human Resource",
+      },
+    });
+  }
+
+  static async delete() {
+    await prismaClient.department.deleteMany({});
+  }
+
+  static async get() {
+    const department = await prismaClient.department.findFirst({
+      where: {
+        name: "HR",
+      },
+    });
+
+    if (!department) {
+      throw new Error("Department is not found.");
+    }
+
+    return department;
+  }
+}
