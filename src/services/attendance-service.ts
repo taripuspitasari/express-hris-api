@@ -7,11 +7,29 @@ import {prismaClient} from "../application/database";
 import {ResponseError} from "../error/response-error";
 
 export class AttendanceService {
+  private static async getEmployeeId(userId: number): Promise<number> {
+    const employee = await prismaClient.employee.findUnique({
+      where: {
+        user_id: userId,
+      },
+    });
+
+    if (!employee) {
+      throw new ResponseError(
+        404,
+        "The user is not registered as an employee."
+      );
+    }
+
+    return employee.id;
+  }
+
   static async checkIn(user: User): Promise<AttendanceResponse> {
+    const employeeId = await this.getEmployeeId(user.id);
     const today = new Date(new Date().toISOString().split("T")[0]);
     const existingAttendance = await prismaClient.attendance.findFirst({
       where: {
-        user_id: user.id,
+        employee_id: employeeId,
         date: today,
       },
     });
@@ -22,7 +40,7 @@ export class AttendanceService {
 
     const attendance = await prismaClient.attendance.create({
       data: {
-        user_id: user.id,
+        employee_id: employeeId,
         check_in_time: new Date(),
         date: today,
       },
@@ -32,10 +50,11 @@ export class AttendanceService {
   }
 
   static async checkOut(user: User): Promise<AttendanceResponse> {
+    const employeeId = await this.getEmployeeId(user.id);
     const today = new Date(new Date().toISOString().split("T")[0]);
     const attendanceToUpdate = await prismaClient.attendance.findFirst({
       where: {
-        user_id: user.id,
+        employee_id: employeeId,
         date: today,
         check_out_time: null,
       },
@@ -58,9 +77,10 @@ export class AttendanceService {
   }
 
   static async history(user: User): Promise<Array<AttendanceResponse>> {
+    const employeeId = await this.getEmployeeId(user.id);
     const attendances = await prismaClient.attendance.findMany({
       where: {
-        user_id: user.id,
+        employee_id: employeeId,
       },
     });
 
@@ -68,10 +88,11 @@ export class AttendanceService {
   }
 
   static async get(user: User): Promise<AttendanceResponse | null> {
+    const employeeId = await this.getEmployeeId(user.id);
     const today = new Date(new Date().toISOString().split("T")[0]);
     const attendance = await prismaClient.attendance.findFirst({
       where: {
-        user_id: user.id,
+        employee_id: employeeId,
         date: today,
       },
     });

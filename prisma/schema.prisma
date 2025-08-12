@@ -15,21 +15,21 @@ datasource db {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  email       String       @unique
-  password    String
-  name        String
-  role        String
-  token       String?
-  attendances Attendance[]
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  name     String
+  role     String
+  token    String?
+  Employee Employee?
 
   @@map("users")
 }
 
 model Attendance {
   id             Int       @id @default(autoincrement())
-  user_id        Int
-  user           User      @relation(fields: [user_id], references: [id])
+  employee_id    Int
+  employee       Employee  @relation(fields: [employee_id], references: [id])
   check_in_time  DateTime
   check_out_time DateTime?
   date           DateTime
@@ -38,9 +38,24 @@ model Attendance {
 }
 
 model Department {
-  id          Int    @id @default(autoincrement())
-  name        String @unique
-  description String @db.Text
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String     @db.Text
+  employees   Employee[]
 
   @@map("departments")
+}
+
+model Employee {
+  id            Int          @id @default(autoincrement())
+  user_id       Int          @unique
+  user          User         @relation(fields: [user_id], references: [id])
+  position      String
+  department_id Int
+  department    Department   @relation(fields: [department_id], references: [id])
+  join_date     DateTime
+  status        String
+  attendances   Attendance[]
+
+  @@map("employees")
 }
