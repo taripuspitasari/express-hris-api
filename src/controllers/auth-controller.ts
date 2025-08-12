@@ -4,14 +4,14 @@ import {
   LoginUserRequest,
   UpdateUserRequest,
 } from "../models/user-model";
-import {UserService} from "../services/user-service";
+import {AuthService} from "../services/auth-service";
 import {UserRequest} from "../types/user-request";
 
-export class UserController {
+export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {
     try {
       const request: CreateUserRequest = req.body as CreateUserRequest;
-      const response = await UserService.register(request);
+      const response = await AuthService.register(request);
       res.status(201).json({
         data: response,
         message: "Registration successful.",
@@ -24,7 +24,7 @@ export class UserController {
   static async login(req: Request, res: Response, next: NextFunction) {
     try {
       const request: LoginUserRequest = req.body as LoginUserRequest;
-      const response = await UserService.login(request);
+      const response = await AuthService.login(request);
       res.status(200).json({
         data: response,
         message: "Login successful.",
@@ -36,7 +36,7 @@ export class UserController {
 
   static async get(req: UserRequest, res: Response, next: NextFunction) {
     try {
-      const response = await UserService.get(req.user!);
+      const response = await AuthService.get(req.user!);
       res.status(200).json({
         data: response,
       });
@@ -48,7 +48,7 @@ export class UserController {
   static async update(req: UserRequest, res: Response, next: NextFunction) {
     try {
       const request: UpdateUserRequest = req.body as UpdateUserRequest;
-      const response = await UserService.update(req.user!, request);
+      const response = await AuthService.update(req.user!, request);
       res.status(200).json({
         data: response,
         message: "Update successful.",
@@ -60,7 +60,7 @@ export class UserController {
 
   static async logout(req: UserRequest, res: Response, next: NextFunction) {
     try {
-      await UserService.logout(req.user!);
+      await AuthService.logout(req.user!);
       res.status(200).json({
         message: "Logout successful.",
       });

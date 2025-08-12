@@ -1,6 +1,6 @@
 import {z, ZodType} from "zod";
 
-export class UserValidation {
+export class AuthValidation {
   static readonly REGISTER: ZodType = z.object({
     email: z.email().max(191),
     password: z.string().min(8).max(191),

@@ -8,15 +8,15 @@ import {
   UpdateUserRequest,
   UserResponse,
 } from "../models/user-model";
-import {UserValidation} from "../validations/user-validation";
+import {AuthValidation} from "../validations/auth-validation";
 import {Validation} from "../validations/validation";
 import bcrypt from "bcrypt";
 import {v4 as uuid} from "uuid";
 
-export class UserService {
+export class AuthService {
   static async register(request: CreateUserRequest): Promise<UserResponse> {
     const registerRequest = Validation.validate(
-      UserValidation.REGISTER,
+      AuthValidation.REGISTER,
       request
     );
 
@@ -40,7 +40,7 @@ export class UserService {
   }
 
   static async login(request: LoginUserRequest): Promise<UserResponse> {
-    const loginRequest = Validation.validate(UserValidation.LOGIN, request);
+    const loginRequest = Validation.validate(AuthValidation.LOGIN, request);
 
     let user = await prismaClient.user.findUnique({
       where: {
@@ -83,7 +83,7 @@ export class UserService {
     user: User,
     request: UpdateUserRequest
   ): Promise<UserResponse> {
-    const updateRequest = Validation.validate(UserValidation.UPDATE, request);
+    const updateRequest = Validation.validate(AuthValidation.UPDATE, request);
 
     if (updateRequest.email) {
       const totalUserWithSameEmail = await prismaClient.user.count({
