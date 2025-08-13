@@ -25,6 +25,12 @@ export type UpdateUserRequest = {
   name?: string;
 };
 
+export type SearchUserRequest = {
+  name?: string;
+  page: number;
+  size: number;
+};
+
 export function toUserResponse(user: User): UserResponse {
   return {
     id: user.id,
