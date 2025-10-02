@@ -20,7 +20,7 @@ export class EmployeeValidation {
   static readonly SEARCH: ZodType = z.object({
     name: z.string().max(191).optional(),
     status: z.string().max(191).optional(),
-    department_id: z.string().optional(),
+    department_id: z.number().optional(),
     page: z.number().min(1).positive(),
     size: z.number().min(1).max(100).positive(),
   });

@@ -131,8 +131,10 @@ export class EmployeeService {
 
     if (searchRequest.name) {
       filters.push({
-        name: {
-          contains: searchRequest.name,
+        user: {
+          name: {
+            contains: searchRequest.name,
+          },
         },
       });
     }
