@@ -9,6 +9,7 @@ hrRouter.post("/departments", DepartmentController.create);
 hrRouter.put("/departments/:departmentId", DepartmentController.update);
 hrRouter.delete("/departments/:departmentId", DepartmentController.remove);
 hrRouter.get("/users/:userId", UserController.get);
+hrRouter.put("/users/:userId", UserController.update);
 hrRouter.get("/users", UserController.search);
 hrRouter.post("/employees", EmployeeController.create);
 hrRouter.put("/employees/:employeeId", EmployeeController.update);

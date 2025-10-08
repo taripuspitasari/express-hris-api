@@ -5,6 +5,7 @@ export type UserResponse = {
   email: string;
   name: string;
   role: string;
+  is_active: boolean;
   token?: string;
 };
 
@@ -25,8 +26,14 @@ export type UpdateUserRequest = {
   name?: string;
 };
 
+export type UpdateUserStatusRequest = {
+  id: number;
+  is_active: boolean;
+};
+
 export type SearchUserRequest = {
   name?: string;
+  role?: string;
   page: number;
   size: number;
 };
@@ -36,6 +43,7 @@ export function toUserResponse(user: User): UserResponse {
     id: user.id,
     email: user.email,
     name: user.name,
+    is_active: user.is_active,
     role: user.role,
   };
 }

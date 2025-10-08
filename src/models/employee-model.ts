@@ -47,6 +47,7 @@ export function toEmployeeResponse(
       id: employee.user.id,
       email: employee.user.email,
       name: employee.user.name,
+      is_active: employee.user.is_active,
       role: employee.user.role,
     },
     department: {
