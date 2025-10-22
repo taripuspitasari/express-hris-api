@@ -15,14 +15,16 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  name      String
-  role      String
-  token     String?
-  is_active Boolean   @default(true)
-  Employee  Employee?
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  password   String
+  name       String
+  role       String
+  token      String?
+  is_active  Boolean   @default(true)
+  Employee   Employee?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
 
   @@map("users")
 }
@@ -48,15 +50,41 @@ model Department {
 }
 
 model Employee {
-  id            Int          @id @default(autoincrement())
-  user_id       Int          @unique
-  user          User         @relation(fields: [user_id], references: [id])
-  position      String
-  department_id Int
-  department    Department   @relation(fields: [department_id], references: [id])
-  join_date     DateTime
-  status        String
-  attendances   Attendance[]
+  id              Int          @id @default(autoincrement())
+  user_id         Int          @unique
+  user            User         @relation(fields: [user_id], references: [id])
+  position        String
+  department_id   Int
+  department      Department   @relation(fields: [department_id], references: [id])
+  join_date       DateTime
+  status          String
+  attendances     Attendance[]
+  leavesRequested Leave[]      @relation("EmployeeLeaves")
+  leavesApproved  Leave[]      @relation("ApprovedLeaves")
 
   @@map("employees")
+}
+
+model Leave {
+  id          Int         @id @default(autoincrement())
+  employee_id Int
+  employee    Employee    @relation("EmployeeLeaves", fields: [employee_id], references: [id])
+  type        String
+  start_date  DateTime
+  end_date    DateTime
+  total_days  Int
+  status      LeaveStatus @default(PENDING)
+  approvedBy  Int?
+  approver    Employee?   @relation("ApprovedLeaves", fields: [approvedBy], references: [id])
+  approvedAt  DateTime?
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  @@map("leaves")
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

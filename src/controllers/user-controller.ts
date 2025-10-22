@@ -1,5 +1,4 @@
 import {NextFunction, Response, Request} from "express";
-import {UserRequest} from "../types/user-request";
 import {UserService} from "../services/user-service";
 import {SearchUserRequest, UpdateUserStatusRequest} from "../models/user-model";
 

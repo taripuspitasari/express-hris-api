@@ -7,6 +7,12 @@ export type AttendanceResponse = {
   date: Date;
 };
 
+export type SearchAttendanceRequest = {
+  id: number;
+  page: number;
+  size: number;
+};
+
 export function toAttendanceResponse(
   attendance: Attendance
 ): AttendanceResponse {

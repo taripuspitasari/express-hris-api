@@ -29,10 +29,9 @@ export class AttendanceController {
 
   static async history(req: UserRequest, res: Response, next: NextFunction) {
     try {
-      const response = await AttendanceService.history(req.user!);
-      res.status(200).json({
-        data: response,
-      });
+      const page = req.query.page ? Number(req.query.page) : 1;
+      const response = await AttendanceService.history(req.user!, {page});
+      res.status(200).json(response);
     } catch (err) {
       next(err);
     }

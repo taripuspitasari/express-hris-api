@@ -5,6 +5,7 @@ import {
 } from "../models/attendance-model";
 import {prismaClient} from "../application/database";
 import {ResponseError} from "../error/response-error";
+import {Pageable} from "../models/page";
 
 export class AttendanceService {
   private static async getEmployeeId(userId: number): Promise<number> {
@@ -76,15 +77,37 @@ export class AttendanceService {
     return toAttendanceResponse(attendance);
   }
 
-  static async history(user: User): Promise<Array<AttendanceResponse>> {
+  static async history(
+    user: User,
+    options: {page: number}
+  ): Promise<Pageable<AttendanceResponse>> {
     const employeeId = await this.getEmployeeId(user.id);
+    const {page} = options;
     const attendances = await prismaClient.attendance.findMany({
+      where: {
+        employee_id: employeeId,
+      },
+      orderBy: {
+        date: "desc",
+      },
+      skip: (page - 1) * 10,
+      take: 10,
+    });
+
+    const total = await prismaClient.attendance.count({
       where: {
         employee_id: employeeId,
       },
     });
 
-    return attendances.map(attendance => toAttendanceResponse(attendance));
+    return {
+      data: attendances.map(attendance => toAttendanceResponse(attendance)),
+      paging: {
+        current_page: page,
+        total_page: Math.ceil(total / 10),
+        size: 10,
+      },
+    };
   }
 
   static async get(user: User): Promise<AttendanceResponse | null> {
