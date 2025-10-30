@@ -24,7 +24,7 @@ model User {
   is_active  Boolean   @default(true)
   Employee   Employee?
   created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  updated_at DateTime  @default(now()) @updatedAt
 
   @@map("users")
 }
@@ -66,25 +66,19 @@ model Employee {
 }
 
 model Leave {
-  id          Int         @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   employee_id Int
-  employee    Employee    @relation("EmployeeLeaves", fields: [employee_id], references: [id])
+  employee    Employee  @relation("EmployeeLeaves", fields: [employee_id], references: [id])
   type        String
   start_date  DateTime
   end_date    DateTime
   total_days  Int
-  status      LeaveStatus @default(PENDING)
+  status      String    @default("pending")
   approvedBy  Int?
-  approver    Employee?   @relation("ApprovedLeaves", fields: [approvedBy], references: [id])
+  approver    Employee? @relation("ApprovedLeaves", fields: [approvedBy], references: [id])
   approvedAt  DateTime?
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @updatedAt
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
 
   @@map("leaves")
-}
-
-enum LeaveStatus {
-  PENDING
-  APPROVED
-  REJECTED
 }
