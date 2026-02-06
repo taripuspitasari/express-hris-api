@@ -15,16 +15,17 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  email      String    @unique
+  id         Int      @id @default(autoincrement())
+  person_id  Int      @unique
+  email      String   @unique
   password   String
-  name       String
-  role       String
   token      String?
-  is_active  Boolean   @default(true)
-  Employee   Employee?
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now()) @updatedAt
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  person Person     @relation(fields: [person_id], references: [id])
+  roles  UserRole[]
 
   @@map("users")
 }
@@ -45,22 +46,25 @@ model Department {
   name        String     @unique
   description String     @db.Text
   employees   Employee[]
+  positions   Position[]
 
   @@map("departments")
 }
 
 model Employee {
   id              Int          @id @default(autoincrement())
-  user_id         Int          @unique
-  user            User         @relation(fields: [user_id], references: [id])
-  position        String
+  person_id       Int          @unique
   department_id   Int
-  department      Department   @relation(fields: [department_id], references: [id])
+  position_id     Int
+  employee_number String
   join_date       DateTime
   status          String
   attendances     Attendance[]
   leavesRequested Leave[]      @relation("EmployeeLeaves")
   leavesApproved  Leave[]      @relation("ApprovedLeaves")
+  department      Department   @relation(fields: [department_id], references: [id])
+  person          Person       @relation(fields: [person_id], references: [id])
+  position        Position     @relation(fields: [position_id], references: [id])
 
   @@map("employees")
 }
@@ -81,4 +85,79 @@ model Leave {
   updated_at  DateTime  @updatedAt
 
   @@map("leaves")
+}
+
+model Person {
+  id         Int       @id @default(autoincrement())
+  fullname   String
+  email      String    @unique
+  phone      String?   @unique
+  birth_date DateTime?
+  gender     String?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  user       User?
+  employee   Employee?
+
+  @@map("people")
+}
+
+model Role {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
+  description String?
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+  permissions RolePermission[]
+  users       UserRole[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
+  description String?
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+  roles       RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  role_id       Int
+  permission_id Int
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  role          Role       @relation(fields: [role_id], references: [id])
+  permission    Permission @relation(fields: [permission_id], references: [id])
+
+  @@id([role_id, permission_id])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  user_id    Int
+  role_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [user_id], references: [id])
+  role       Role     @relation(fields: [role_id], references: [id])
+
+  @@id([user_id, role_id])
+  @@map("user_roles")
+}
+
+model Position {
+  id            Int        @id @default(autoincrement())
+  department_id Int
+  name          String
+  level         String
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  department    Department @relation(fields: [department_id], references: [id])
+  employees     Employee[]
+
+  @@map("positions")
 }
