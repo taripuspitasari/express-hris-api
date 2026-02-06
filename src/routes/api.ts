@@ -21,4 +21,5 @@ apiRouter.get("/api/departments/:departmentId", DepartmentController.get);
 apiRouter.get("/api/departments", DepartmentController.search);
 apiRouter.post("/api/leaves", LeaveController.create);
 apiRouter.get("/api/leaves", LeaveController.search);
+apiRouter.get("/api/leave/:leaveId", LeaveController.get);
 apiRouter.use("/api/hr", hrRouter);

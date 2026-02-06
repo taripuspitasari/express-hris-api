@@ -2,8 +2,10 @@ import {prismaClient} from "../application/database";
 import {ResponseError} from "../error/response-error";
 import {
   CreateLeaveRequest,
+  LeaveDetailResponse,
   LeaveResponse,
   SearchLeaveRequest,
+  toLeaveDetailResponse,
   toLeaveResponse,
 } from "../models/leave-model";
 import {LeaveValidation} from "../validations/leave-validation";
@@ -102,5 +104,31 @@ export class LeaveService {
         size: searchRequest.size,
       },
     };
+  }
+
+  static async get(id: number): Promise<LeaveDetailResponse> {
+    const result = await prismaClient.leave.findFirst({
+      where: {id},
+      include: {
+        employee: {
+          include: {
+            user: true,
+            department: true,
+          },
+        },
+        approver: {
+          include: {
+            user: true,
+            department: true,
+          },
+        },
+      },
+    });
+
+    if (!result) {
+      throw new ResponseError(404, "Employee not found.");
+    }
+
+    return toLeaveDetailResponse(result);
   }
 }

@@ -36,4 +36,16 @@ export class LeaveController {
       next(err);
     }
   }
+
+  static async get(req: Request, res: Response, next: NextFunction) {
+    try {
+      const leaveId = Number(req.params.leaveId);
+      const response = await LeaveService.get(leaveId);
+      res.status(200).json({
+        data: response,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }

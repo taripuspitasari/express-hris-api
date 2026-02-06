@@ -1,4 +1,5 @@
-import {Leave} from "@prisma/client";
+import {Department, Employee, Leave, User} from "@prisma/client";
+import {EmployeeResponse, toEmployeeResponse} from "./employee-model";
 
 export type LeaveResponse = {
   id: number;
@@ -7,6 +8,18 @@ export type LeaveResponse = {
   end_date: Date;
   total_days: number;
   status: string;
+};
+
+export type LeaveDetailResponse = {
+  id: number;
+  employee: EmployeeResponse;
+  type: string;
+  start_date: Date;
+  end_date: Date;
+  total_days: number;
+  status: string;
+  approver?: EmployeeResponse | null;
+  approvedAt?: Date | null;
 };
 
 export type CreateLeaveRequest = {
@@ -32,5 +45,24 @@ export function toLeaveResponse(leave: Leave): LeaveResponse {
     end_date: leave.end_date,
     total_days: leave.total_days,
     status: leave.status,
+  };
+}
+
+export function toLeaveDetailResponse(
+  leave: Leave & {
+    employee: Employee & {user: User; department: Department};
+    approver: (Employee & {user: User; department: Department}) | null;
+  }
+): LeaveDetailResponse {
+  return {
+    id: leave.id,
+    employee: toEmployeeResponse(leave.employee),
+    type: leave.type,
+    start_date: leave.start_date,
+    end_date: leave.end_date,
+    total_days: leave.total_days,
+    status: leave.status,
+    approver: leave.approver ? toEmployeeResponse(leave.approver) : null,
+    approvedAt: leave.approvedAt ?? undefined,
   };
 }

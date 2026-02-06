@@ -26,7 +26,7 @@ export class UserService {
   }
 
   static async search(
-    request: SearchUserRequest
+    request: SearchUserRequest,
   ): Promise<Pageable<UserResponse>> {
     const searchRequest = Validation.validate(UserValidation.SEARCH, request);
     const skip = (searchRequest.page - 1) * searchRequest.size;
