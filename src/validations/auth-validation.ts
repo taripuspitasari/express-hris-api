@@ -2,9 +2,9 @@ import {z, ZodType} from "zod";
 
 export class AuthValidation {
   static readonly REGISTER: ZodType = z.object({
+    fullname: z.string().min(1).max(191),
     email: z.email().max(191),
     password: z.string().min(8).max(191),
-    name: z.string().min(1).max(191),
   });
 
   static readonly LOGIN: ZodType = z.object({
@@ -12,9 +12,8 @@ export class AuthValidation {
     password: z.string().min(8).max(191),
   });
 
-  static readonly UPDATE: ZodType = z.object({
-    email: z.email().max(191).optional(),
-    password: z.string().min(8).max(191).optional(),
-    name: z.string().max(191).optional(),
+  static readonly CHANGE_PASSWORD: ZodType = z.object({
+    old_password: z.string().min(8).max(191),
+    new_password: z.string().min(8).max(191),
   });
 }

@@ -1,6 +1,17 @@
 import {Request} from "express";
-import {User} from "@prisma/client";
+import {User, Role, Permission} from "@prisma/client";
+
+export type AuthUser = User & {
+  roles: {
+    role: Role & {
+      permissions: {
+        permission: Permission;
+      }[];
+    };
+  }[];
+  permissions: string[];
+};
 
 export interface UserRequest extends Request {
-  user?: User;
+  user?: AuthUser;
 }

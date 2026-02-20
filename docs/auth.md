@@ -1,16 +1,16 @@
-# User Api Spec
+# Auth Api Spec
 
-## Register User
+## Register
 
-Endpoint: POST /api/users
+Endpoint: POST /api/auth/register
 
 Request Body:
 
 ```json
 {
+  "fullname": "Jane Doe",
   "email": "janedoe@gmail.com",
-  "password": "secretkey",
-  "name": "Jane Doe"
+  "password": "secretkey"
 }
 ```
 
@@ -18,10 +18,7 @@ Response Body (success) :
 
 ```json
 {
-  "id": 1,
-  "email": "janedoe@gmail.com",
-  "name": "Jane Doe",
-  "role": "employee"
+  "message": "User registered successfully. Please login."
 }
 ```
 
@@ -33,9 +30,9 @@ Response Body (failed) :
 }
 ```
 
-## Login User
+## Login
 
-Endpoint: POST /api/users/login
+Endpoint: POST /api/auth/login
 
 Request Body:
 
@@ -50,11 +47,13 @@ Response Body (success) :
 
 ```json
 {
-  "id": 1,
-  "email": "janedoe@gmail.com",
-  "name": "Jane Doe",
-  "role": "employee",
-  "token": "uuid"
+  "message": "Login successfully",
+  "data": {
+    "id": 1,
+    "fullname": "Jane Doe",
+    "roles": ["employee"],
+    "token": "uuid"
+  }
 }
 ```
 
@@ -66,9 +65,9 @@ Response Body (failed) :
 }
 ```
 
-## Get User
+## Me
 
-Endpoint: GET /api/users/current
+Endpoint: GET /api/auth/me
 
 Request Header:
 
@@ -78,10 +77,11 @@ Response Body (success) :
 
 ```json
 {
-  "id": 1,
-  "email": "janedoe@gmail.com",
-  "name": "Jane Doe",
-  "role": "employee"
+  "data": {
+    "id": 1,
+    "fullname": "Jane Doe",
+    "roles": ["employee"]
+  }
 }
 ```
 
@@ -93,9 +93,9 @@ Response Body (failed) :
 }
 ```
 
-## Update User
+## Update Profile
 
-Endpoint: PATCH /api/users/current
+Endpoint: PATCH /api/auth/update-profile
 Request Header:
 
 - Authorization: token
@@ -104,10 +104,11 @@ Request Body:
 
 ```json
 {
+  "fullname": "Jane Doe update",
   "email": "janedoeupdate@gmail.com",
-  "password": "secretkeyupdate",
-  "name": "Jane Doe update",
-  "role": "applicant"
+  "phone": "08999998812",
+  "birth_date": "12-12-2012",
+  "gender": "female"
 }
 ```
 
@@ -115,10 +116,15 @@ Response Body (success) :
 
 ```json
 {
-  "id": 1,
-  "email": "janedoeupdate@gmail.com",
-  "name": "Jane Doe update",
-  "role": "applicant"
+  "message": "Profile updated successfully",
+  "data": {
+    "id": 1,
+    "fullname": "Jane Doe update",
+    "email": "janedoeupdate@gmail.com",
+    "phone": "08999998812",
+    "birth_date": "12-12-2012",
+    "gender": "female"
+  }
 }
 ```
 
@@ -130,9 +136,41 @@ Response Body (failed) :
 }
 ```
 
-## Logout User
+## Update Password
 
-Endpoint: DELETE /api/users/current
+Endpoint: PATCH /api/auth/change-password
+Request Header:
+
+- Authorization: token
+
+Request Body:
+
+```json
+{
+  "old_password": "secretkey",
+  "new_password": "NewSecretKey123"
+}
+```
+
+Response Body (success) :
+
+```json
+{
+  "message": "Password updated successfully. Please login again."
+}
+```
+
+Response Body (failed) :
+
+```json
+{
+  "errors": ""
+}
+```
+
+## Logout
+
+Endpoint: DELETE /api/auth/logout
 
 Request Header:
 
@@ -142,7 +180,7 @@ Response Body (success) :
 
 ```json
 {
-  "message": "Succesfully logout"
+  "message": "Logged out successfully"
 }
 ```
 

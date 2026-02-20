@@ -1,29 +1,41 @@
-import {User} from "@prisma/client";
+import {User, Person, Role} from "@prisma/client";
 
-export type UserResponse = {
+export type AuthResponse = {
   id: number;
-  email: string;
-  name: string;
-  role: string;
   is_active: boolean;
+  roles: string[];
   token?: string;
+  profile: {
+    fullname: string;
+    email: string;
+    phone: string | null;
+    gender: string | null;
+    birth_date: string | null;
+  };
 };
 
-export type CreateUserRequest = {
+export type RegisterRequest = {
+  fullname: string;
   email: string;
   password: string;
-  name: string;
 };
 
-export type LoginUserRequest = {
+export type LoginRequest = {
   email: string;
   password: string;
 };
 
-export type UpdateUserRequest = {
+export type UpdateProfileRequest = {
+  fullname?: string;
   email?: string;
-  password?: string;
-  name?: string;
+  phone?: string;
+  birth_date?: string;
+  gender?: string;
+};
+
+export type UpdatePasswordRequest = {
+  old_password: string;
+  new_password: string;
 };
 
 export type UpdateUserStatusRequest = {
@@ -38,12 +50,21 @@ export type SearchUserRequest = {
   size: number;
 };
 
-export function toUserResponse(user: User): UserResponse {
+export function toAuthResponse(
+  user: User & {person: Person; roles: {role: Role}[]},
+): AuthResponse {
   return {
     id: user.id,
-    email: user.email,
-    name: user.name,
     is_active: user.is_active,
-    role: user.role,
+    roles: user.roles.map(ur => ur.role.name),
+    profile: {
+      fullname: user.person.fullname,
+      email: user.person.email,
+      phone: user.person.phone,
+      gender: user.person.gender,
+      birth_date: user.person.birth_date
+        ? user.person.birth_date.toISOString().split("T")[0]
+        : null,
+    },
   };
 }

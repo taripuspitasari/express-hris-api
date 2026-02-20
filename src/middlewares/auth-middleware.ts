@@ -5,7 +5,7 @@ import {UserRequest} from "../types/user-request";
 export const authMiddleware = async (
   req: UserRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const token = req.get("Authorization");
 
@@ -14,12 +14,25 @@ export const authMiddleware = async (
       where: {
         token: token,
       },
+      include: {
+        roles: {
+          include: {
+            role: {
+              include: {
+                permissions: {include: {permission: true}},
+              },
+            },
+          },
+        },
+      },
     });
 
     if (user) {
-      req.user = user;
-      next();
-      return;
+      const permissions = user.roles.flatMap(ur =>
+        ur.role.permissions.map(rp => rp.permission.name),
+      );
+      req.user = {...user, permissions: [...new Set(permissions)]};
+      return next();
     }
   }
 

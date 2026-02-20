@@ -1,8 +1,9 @@
 import {Request, Response, NextFunction} from "express";
 import {
-  CreateUserRequest,
-  LoginUserRequest,
-  UpdateUserRequest,
+  LoginRequest,
+  RegisterRequest,
+  UpdatePasswordRequest,
+  UpdateProfileRequest,
 } from "../models/user-model";
 import {AuthService} from "../services/auth-service";
 import {UserRequest} from "../types/user-request";
@@ -10,11 +11,10 @@ import {UserRequest} from "../types/user-request";
 export class AuthController {
   static async register(req: Request, res: Response, next: NextFunction) {
     try {
-      const request: CreateUserRequest = req.body as CreateUserRequest;
-      const response = await AuthService.register(request);
+      const request: RegisterRequest = req.body as RegisterRequest;
+      await AuthService.register(request);
       res.status(201).json({
-        data: response,
-        message: "Registration successful.",
+        message: "User registered successfully. Please login.",
       });
     } catch (err) {
       next(err);
@@ -23,11 +23,11 @@ export class AuthController {
 
   static async login(req: Request, res: Response, next: NextFunction) {
     try {
-      const request: LoginUserRequest = req.body as LoginUserRequest;
+      const request: LoginRequest = req.body as LoginRequest;
       const response = await AuthService.login(request);
       res.status(200).json({
+        message: "Login successfully",
         data: response,
-        message: "Login successful.",
       });
     } catch (err) {
       next(err);
@@ -45,13 +45,33 @@ export class AuthController {
     }
   }
 
-  static async update(req: UserRequest, res: Response, next: NextFunction) {
+  static async updateProfile(
+    req: UserRequest,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
-      const request: UpdateUserRequest = req.body as UpdateUserRequest;
-      const response = await AuthService.update(req.user!, request);
+      const request: UpdateProfileRequest = req.body as UpdateProfileRequest;
+      const response = await AuthService.updateProfil(req.user!, request);
       res.status(200).json({
+        message: "Profile updated successfully",
         data: response,
-        message: "Update successful.",
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async updatePassword(
+    req: UserRequest,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const request: UpdatePasswordRequest = req.body as UpdatePasswordRequest;
+      await AuthService.updatePassword(req.user!, request);
+      res.status(200).json({
+        message: "Password updated successfully",
       });
     } catch (err) {
       next(err);
@@ -62,7 +82,7 @@ export class AuthController {
     try {
       await AuthService.logout(req.user!);
       res.status(200).json({
-        message: "Logout successful.",
+        message: "Logged out successfully",
       });
     } catch (err) {
       next(err);
