@@ -1,5 +1,4 @@
 import {Response, NextFunction} from "express";
-import {prismaClient} from "../application/database";
 import {UserRequest} from "../types/user-request";
 
 export const authorizeMiddleware = (requiredPermission: string) => {

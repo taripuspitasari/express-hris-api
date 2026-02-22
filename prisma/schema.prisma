@@ -46,6 +46,9 @@ model Department {
   description String     @db.Text
   employees   Employee[]
   positions   Position[]
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @default(now()) @updatedAt
+  deleted_at  DateTime?
 
   @@map("departments")
 }
@@ -81,7 +84,7 @@ model Leave {
   approver    Employee? @relation("ApprovedLeaves", fields: [approvedBy], references: [id])
   approvedAt  DateTime?
   created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  updated_at  DateTime  @default(now()) @updatedAt
 
   @@map("leaves")
 }
@@ -94,7 +97,7 @@ model Person {
   birth_date DateTime?
   gender     String?
   created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  updated_at DateTime  @default(now()) @updatedAt
   user       User?
   employee   Employee?
 
@@ -106,7 +109,7 @@ model Role {
   name        String           @unique
   description String?
   created_at  DateTime         @default(now())
-  updated_at  DateTime         @updatedAt
+  updated_at  DateTime         @default(now()) @updatedAt
   permissions RolePermission[]
   users       UserRole[]
 
@@ -118,7 +121,7 @@ model Permission {
   name        String           @unique
   description String?
   created_at  DateTime         @default(now())
-  updated_at  DateTime         @updatedAt
+  updated_at  DateTime         @default(now()) @updatedAt
   roles       RolePermission[]
 
   @@map("permissions")
@@ -128,7 +131,7 @@ model RolePermission {
   role_id       Int
   permission_id Int
   created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
+  updated_at    DateTime   @default(now()) @updatedAt
   role          Role       @relation(fields: [role_id], references: [id], onDelete: Cascade)
   permission    Permission @relation(fields: [permission_id], references: [id], onDelete: Cascade)
 
@@ -140,7 +143,7 @@ model UserRole {
   user_id    Int
   role_id    Int
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @default(now()) @updatedAt
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   role       Role     @relation(fields: [role_id], references: [id], onDelete: Cascade)
 
@@ -154,7 +157,7 @@ model Position {
   name          String
   level         String
   created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
+  updated_at    DateTime   @default(now()) @updatedAt
   department    Department @relation(fields: [department_id], references: [id])
   employees     Employee[]
 

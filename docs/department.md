@@ -28,7 +28,7 @@ Response Body (failed) :
 
 ## Create department
 
-Endpoint: POST /api/hr/departments
+Endpoint: POST /api/departments/
 
 Request Header:
 
@@ -61,7 +61,7 @@ Response Body (failed) :
 
 ## Update department
 
-Endpoint: PUT /api/hr/departments/:departmentId
+Endpoint: PUT /api/departments/:departmentId
 
 Request Header:
 
@@ -95,7 +95,7 @@ Response Body (failed) :
 
 ## Remove department
 
-Endpoint: DELETE /api/hr/departments/:deparmentId
+Endpoint: DELETE /api/departments/:deparmentId
 
 Request Header:
 

@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import {web} from "../src/application/web";
 import {logger} from "../src/application/logging";
-import {UserTest} from "./test-util/user";
+import {UserTest} from "./test-utils/user";
 
 describe("POST /api/auth/register", () => {
   afterEach(async () => {
