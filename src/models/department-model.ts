@@ -24,7 +24,7 @@ export type SearchDepartmentRequest = {
 };
 
 export function toDepartmentResponse(
-  department: Department
+  department: Department,
 ): DepartmentResponse {
   return {
     id: department.id,

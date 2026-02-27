@@ -48,7 +48,7 @@ export class DepartmentService {
       request,
     );
 
-    const departmentToUpdate = await prismaClient.department.findUnique({
+    const departmentToUpdate = await prismaClient.department.findFirst({
       where: {
         id: updateRequest.id,
         deleted_at: null,

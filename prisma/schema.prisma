@@ -158,6 +158,7 @@ model Position {
   level         String
   created_at    DateTime   @default(now())
   updated_at    DateTime   @default(now()) @updatedAt
+  deleted_at    DateTime?
   department    Department @relation(fields: [department_id], references: [id])
   employees     Employee[]
 

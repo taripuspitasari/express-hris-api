@@ -6,6 +6,7 @@ import {AttendanceController} from "../controllers/attendance-controller";
 import {DepartmentController} from "../controllers/department-controller";
 import {hrRouter} from "./hr-router";
 import {LeaveController} from "../controllers/leave-controller";
+import {PositionController} from "../controllers/position-controller";
 
 export const apiRouter = express.Router();
 apiRouter.use(authMiddleware);
@@ -41,6 +42,34 @@ apiRouter.delete(
   "/api/departments/:departmentId",
   authorizeMiddleware("delete_department"),
   DepartmentController.remove,
+);
+
+apiRouter.get(
+  "/api/positions",
+  authorizeMiddleware("view_position"),
+  PositionController.search,
+);
+apiRouter.get(
+  "/api/positions/:positionId",
+  authorizeMiddleware("view_position"),
+  PositionController.get,
+);
+apiRouter.post(
+  "/api/positions",
+  authorizeMiddleware("create_position"),
+  PositionController.create,
+);
+
+apiRouter.put(
+  "/api/positions/:positionId",
+  authorizeMiddleware("update_position"),
+  PositionController.update,
+);
+
+apiRouter.delete(
+  "/api/positions/:positionId",
+  authorizeMiddleware("delete_position"),
+  PositionController.remove,
 );
 
 apiRouter.get("/api/users/current", AuthController.get);

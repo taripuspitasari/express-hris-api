@@ -141,7 +141,7 @@ describe("PUT /api/departments/:departmentId", () => {
     expect(response.body.message).toBeDefined();
   });
 
-  it("should return 404 if the department to update does not exist", async () => {
+  it("should return 400 if the department to update does not exist", async () => {
     const response = await supertest(web)
       .put("/api/departments/999")
       .set("Authorization", "test")
