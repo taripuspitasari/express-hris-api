@@ -28,8 +28,8 @@ export class UserTest {
             {
               role: {
                 connectOrCreate: {
-                  where: {id: 1},
-                  create: {id: 1, name: "employee"},
+                  where: {name: "user"},
+                  create: {name: "user"},
                 },
               },
             },

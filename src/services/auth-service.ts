@@ -51,8 +51,8 @@ export class AuthService {
             create: {
               role: {
                 connectOrCreate: {
-                  where: {id: 1},
-                  create: {id: 1, name: "employee"},
+                  where: {name: "user"},
+                  create: {name: "user"},
                 },
               },
             },
@@ -88,6 +88,13 @@ export class AuthService {
 
     if (!person || !person.user) {
       throw new ResponseError(401, "Invalid email or password.");
+    }
+
+    if (!person.user.is_active) {
+      throw new ResponseError(
+        401,
+        "Your account is inactive. Please contact administrator.",
+      );
     }
 
     const isPasswordValid = await bcrypt.compare(

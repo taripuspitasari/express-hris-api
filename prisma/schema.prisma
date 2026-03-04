@@ -54,13 +54,17 @@ model Department {
 }
 
 model Employee {
-  id              Int          @id @default(autoincrement())
-  person_id       Int          @unique
+  id              Int       @id @default(autoincrement())
+  person_id       Int       @unique
   department_id   Int
   position_id     Int
   employee_number String
   join_date       DateTime
   status          String
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @default(now()) @updatedAt
+  deleted_at      DateTime?
+
   attendances     Attendance[]
   leavesRequested Leave[]      @relation("EmployeeLeaves")
   leavesApproved  Leave[]      @relation("ApprovedLeaves")

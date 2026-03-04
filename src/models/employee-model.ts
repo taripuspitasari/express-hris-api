@@ -1,19 +1,21 @@
-import {Department, Employee, User} from "@prisma/client";
-import {UserResponse} from "./user-model";
+import {Department, Employee, Person, Position} from "@prisma/client";
+import {ProfileResponse} from "./person-model";
 import {DepartmentResponse} from "./department-model";
+import {PositionResponse} from "./position-model";
 
 export type EmployeeResponse = {
   id: number;
-  position: string;
+  employee_number: string;
   join_date: Date;
   status: string;
-  user: UserResponse;
+  profile: ProfileResponse;
   department: DepartmentResponse;
+  position: PositionResponse;
 };
 
-export type CreateEmployeeRequest = {
-  user_id: number;
-  position: string;
+export type PromoteEmployeeRequest = {
+  person_id: number;
+  position_id: number;
   department_id: number;
   join_date: string;
   status: string;
@@ -21,14 +23,15 @@ export type CreateEmployeeRequest = {
 
 export type UpdateEmployeeRequest = {
   id: number;
-  position?: string;
-  department_id?: number;
   join_date?: string;
   status?: string;
+  position_id?: number;
+  department_id?: number;
 };
 
 export type SearchEmployeeRequest = {
-  name?: string;
+  fullname?: string;
+  employee_number?: string;
   status?: string;
   department_id?: number;
   page: number;
@@ -36,24 +39,36 @@ export type SearchEmployeeRequest = {
 };
 
 export function toEmployeeResponse(
-  employee: Employee & {user: User; department: Department}
+  employee: Employee & {
+    person: Person;
+    position: Position;
+    department: Department;
+  },
 ): EmployeeResponse {
   return {
     id: employee.id,
-    position: employee.position,
+    employee_number: employee.employee_number,
     join_date: employee.join_date,
     status: employee.status,
-    user: {
-      id: employee.user.id,
-      email: employee.user.email,
-      name: employee.user.name,
-      is_active: employee.user.is_active,
-      role: employee.user.role,
+    profile: {
+      id: employee.person.id,
+      email: employee.person.email,
+      fullname: employee.person.fullname,
+      phone: employee.person.phone,
+      gender: employee.person.gender,
+      birth_date: employee.person.birth_date
+        ? employee.person.birth_date.toISOString().split("T")[0]
+        : null,
     },
     department: {
       id: employee.department.id,
       name: employee.department.name,
       description: employee.department.description,
+    },
+    position: {
+      id: employee.position.id,
+      name: employee.position.name,
+      level: employee.position.level,
     },
   };
 }

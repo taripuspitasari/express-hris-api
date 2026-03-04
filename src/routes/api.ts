@@ -7,6 +7,7 @@ import {DepartmentController} from "../controllers/department-controller";
 import {hrRouter} from "./hr-router";
 import {LeaveController} from "../controllers/leave-controller";
 import {PositionController} from "../controllers/position-controller";
+import {EmployeeController} from "../controllers/employee-controller";
 
 export const apiRouter = express.Router();
 apiRouter.use(authMiddleware);
@@ -70,6 +71,34 @@ apiRouter.delete(
   "/api/positions/:positionId",
   authorizeMiddleware("delete_position"),
   PositionController.remove,
+);
+
+apiRouter.get(
+  "/api/employees",
+  authorizeMiddleware("view_employee"),
+  EmployeeController.search,
+);
+apiRouter.get(
+  "/api/employees/:employeeId",
+  authorizeMiddleware("view_employee"),
+  EmployeeController.get,
+);
+apiRouter.post(
+  "/api/employees/promote",
+  authorizeMiddleware("promote_employee"),
+  EmployeeController.promote,
+);
+
+apiRouter.put(
+  "/api/employees/:employeeId",
+  authorizeMiddleware("update_employee"),
+  EmployeeController.update,
+);
+
+apiRouter.delete(
+  "/api/employees/:employeeId/offboard",
+  authorizeMiddleware("offboard_employee"),
+  EmployeeController.offboard,
 );
 
 apiRouter.get("/api/users/current", AuthController.get);

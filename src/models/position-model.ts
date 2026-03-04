@@ -4,7 +4,7 @@ export type PositionResponse = {
   id: number;
   name: string;
   level: string;
-  department: {
+  department?: {
     id: number;
     name: string;
   };

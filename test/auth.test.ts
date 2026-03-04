@@ -78,7 +78,7 @@ describe("POST /api/auth/login", () => {
     expect(response.body.data.id).toBeDefined();
     expect(response.body.data.profile.email).toBe("test@gmail.com");
     expect(response.body.data.profile.fullname).toBe("Test User");
-    expect(response.body.data.roles).toEqual(["employee"]);
+    expect(response.body.data.roles).toEqual(["user"]);
     expect(response.body.data.token).toBeDefined();
     expect(response.body.message).toBe("Login successfully");
   });
@@ -126,7 +126,7 @@ describe("GET /api/auth/me", () => {
     expect(response.body.data.id).toBeDefined();
     expect(response.body.data.profile.email).toBe("test@gmail.com");
     expect(response.body.data.profile.fullname).toBe("Test User");
-    expect(response.body.data.roles).toEqual(["employee"]);
+    expect(response.body.data.roles).toEqual(["user"]);
   });
 
   it("should return 401 when token is invalid", async () => {
