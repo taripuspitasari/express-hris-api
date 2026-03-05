@@ -24,7 +24,7 @@ describe("POST /api/departments", () => {
         name: "IT",
         description: "Information Technology",
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     logger.debug(response.body);
     expect(response.status).toBe(201);
@@ -39,7 +39,7 @@ describe("POST /api/departments", () => {
         name: "IT",
         description: "Information Technology",
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     const response = await supertest(web)
       .post("/api/departments")
@@ -47,7 +47,7 @@ describe("POST /api/departments", () => {
         name: "IT",
         description: "Information Technology",
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     logger.debug(response.body);
     expect(response.status).toBe(400);
@@ -64,7 +64,7 @@ describe("POST /api/departments", () => {
         name: "",
         description: "",
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     logger.debug(response.body);
     expect(response.status).toBe(400);
@@ -90,7 +90,7 @@ describe("GET /api/departments/:departmentId", () => {
   it("should return 200 and the correct department data", async () => {
     const response = await supertest(web)
       .get(`/api/departments/${currentDepartment.id}`)
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     logger.debug(response.body);
     expect(response.status).toBe(200);
@@ -100,7 +100,7 @@ describe("GET /api/departments/:departmentId", () => {
   it("should return 404 if the department does not exist", async () => {
     const response = await supertest(web)
       .get("/api/departments/999")
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     logger.debug(response.body);
     expect(response.status).toBe(404);
@@ -128,7 +128,7 @@ describe("PUT /api/departments/:departmentId", () => {
   it("should return 200 and update the department successfully when given valid data", async () => {
     const response = await supertest(web)
       .put(`/api/departments/${currentDepartment.id}`)
-      .set("Authorization", "test")
+      .set("Authorization", "testhr")
       .send({
         name: "HR edit",
         description: "Human Resource edit",
@@ -144,7 +144,7 @@ describe("PUT /api/departments/:departmentId", () => {
   it("should return 400 if the department to update does not exist", async () => {
     const response = await supertest(web)
       .put("/api/departments/999")
-      .set("Authorization", "test")
+      .set("Authorization", "testhr")
       .send({
         name: "HR edit",
         description: "Human Resource edit",
@@ -164,11 +164,11 @@ describe("PUT /api/departments/:departmentId", () => {
         name: "IT",
         description: "Information Technology",
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     const response = await supertest(web)
       .put(`/api/departments/${currentDepartment.id}`)
-      .set("Authorization", "test")
+      .set("Authorization", "testhr")
       .send({
         name: "IT",
         description: "Information Technology",
@@ -201,7 +201,7 @@ describe("DELETE /api/departments/:deparmentId", () => {
     const id = currentDepartment.id;
     const response = await supertest(web)
       .delete(`/api/departments/${id}`)
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     logger.debug(response.body);
     expect(response.status).toBe(200);
@@ -211,7 +211,7 @@ describe("DELETE /api/departments/:deparmentId", () => {
   it("should return 404 if the department to delete does not exist", async () => {
     const response = await supertest(web)
       .delete("/api/departments/999")
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     logger.debug(response.body);
     expect(response.status).toBe(404);
@@ -238,7 +238,7 @@ describe("GET /api/departments", () => {
 
     const response = await supertest(web)
       .get("/api/departments")
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     logger.debug(response.body);
     expect(response.status).toBe(200);

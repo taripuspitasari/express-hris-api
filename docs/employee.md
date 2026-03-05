@@ -1,8 +1,64 @@
 # Employee Api Spec
 
+## Promote Employee
+
+Endpoint: POST /api/employees/promote
+
+Request Header:
+
+- Authorization: token
+
+```json
+{
+  "person_id": 1,
+  "position_id": 2,
+  "department_id": 3,
+  "join_date": "2022-08-01T00:00:00.000Z",
+  "status": "active"
+}
+```
+
+Response Body (success):
+
+```json
+{
+  "message": "Employee created successfully.",
+  "data": {
+    "id": 1,
+    "employee_number": "EMP-00001",
+    "join_date": "2022-08-01T00:00:00.000Z",
+    "status": "active",
+    "profile": {
+      "id": 1,
+      "email": "jennytan@gmail.com",
+      "fullname": "Jenny Tan",
+      "phone": "08900987708",
+      "gender": "female",
+      "birthdate": "2022-08-01"
+    },
+    "position": {
+      "id": 1,
+      "name": "Junior"
+    },
+    "department": {
+      "id": 1,
+      "name": "IT"
+    }
+  }
+}
+```
+
+Response Body (failed) :
+
+```json
+{
+  "errors": ""
+}
+```
+
 ## Get employee
 
-Endpoint: GET /api/hr/employee/:employeeId
+Endpoint: GET /api/employees/:employeeId
 
 Request Header:
 
@@ -12,21 +68,27 @@ Response Body (success) :
 
 ```json
 {
-  "id": 1,
-  "join_date": "2022-08-01T00:00:00.000Z",
-  "position": "Junior",
-  "status": "probation",
-  "department": {
+  "data": {
     "id": 1,
-    "name": "IT",
-    "description": "Information Technology"
-  },
-  "user": {
-    "email": "jennytan@gmail.com",
-    "id": 1,
-    "is_active": true,
-    "name": "Jenny Tan",
-    "role": "employee"
+    "employee_number": "EMP-00001",
+    "join_date": "2022-08-01T00:00:00.000Z",
+    "status": "active",
+    "profile": {
+      "id": 1,
+      "email": "jennytan@gmail.com",
+      "fullname": "Jenny Tan",
+      "phone": "08900987708",
+      "gender": "female",
+      "birthdate": "2022-08-01"
+    },
+    "position": {
+      "id": 1,
+      "name": "Junior"
+    },
+    "department": {
+      "id": 1,
+      "name": "IT"
+    }
   }
 }
 ```
@@ -41,7 +103,7 @@ Response Body (failed) :
 
 ## Update employee
 
-Endpoint: PUT /api/hr/employee/:employeeId
+Endpoint: PUT /api/employees/:employeeId
 
 Request Header:
 
@@ -50,10 +112,64 @@ Request Header:
 ```json
 {
   "id": 1,
+  "position_id": 2,
+  "department_id": 3,
   "join_date": "2022-08-01T00:00:00.000Z",
-  "position": "Junior",
-  "status": "probation",
-  "department_id": 1
+  "status": "active"
+}
+```
+
+Response Body (success) :
+
+```json
+{
+  "message": "Employee updated successfully.",
+  "data": {
+    "id": 1,
+    "employee_number": "EMP-00001",
+    "join_date": "2022-08-01T00:00:00.000Z",
+    "status": "active",
+    "profile": {
+      "id": 1,
+      "email": "jennytan@gmail.com",
+      "fullname": "Jenny Tan",
+      "phone": "08900987708",
+      "gender": "female",
+      "birthdate": "2022-08-01"
+    },
+    "position": {
+      "id": 1,
+      "name": "Junior"
+    },
+    "department": {
+      "id": 1,
+      "name": "IT"
+    }
+  }
+}
+```
+
+Response Body (failed) :
+
+```json
+{
+  "errors": ""
+}
+```
+
+## Offboard Employee
+
+Endpoint: DELETE /api/employees/:employeeId
+
+Request Header:
+
+- Authorization: token
+
+Response Body (success) :
+
+```json
+{
+  "message": "Employee offboarded and access revoked successfully."
 }
 ```
 
@@ -69,7 +185,10 @@ Response Body (failed) :
 
 Endpoint: GET /api/employees
 
-- name: string, employee name, optional
+- fullname: string, optional
+- status: string, optional
+- employee_number: string, optional
+- department_id: number, optional
 - page: number, default 1
 - size: number, default 10
 
@@ -84,20 +203,24 @@ Response Body (success) :
   "data": [
     {
       "id": 1,
+      "employee_number": "EMP-00001",
       "join_date": "2022-08-01T00:00:00.000Z",
-      "position": "Junior",
-      "status": "probation",
+      "status": "active",
+      "profile": {
+        "id": 1,
+        "email": "jennytan@gmail.com",
+        "fullname": "Jenny Tan",
+        "phone": "08900987708",
+        "gender": "female",
+        "birthdate": "2022-08-01"
+      },
+      "position": {
+        "id": 1,
+        "name": "Junior"
+      },
       "department": {
         "id": 1,
-        "name": "IT",
-        "description": "Information Technology"
-      },
-      "user": {
-        "email": "jennytan@gmail.com",
-        "id": 1,
-        "is_active": true,
-        "name": "Jenny Tan",
-        "role": "employee"
+        "name": "IT"
       }
     }
   ],

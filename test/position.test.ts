@@ -28,7 +28,7 @@ describe("POST /api/positions", () => {
         level: "Staff",
         department_id: currentDepartment.id,
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(201);
     expect(response.body.data.name).toContain("HR Staff");
@@ -44,7 +44,7 @@ describe("POST /api/positions", () => {
         level: "Staff",
         department_id: currentDepartment.id,
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     const response = await supertest(web)
       .post("/api/positions")
@@ -53,7 +53,7 @@ describe("POST /api/positions", () => {
         level: "Staff",
         department_id: currentDepartment.id,
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(400);
     expect(response.body.errors).toBe(
@@ -69,7 +69,7 @@ describe("POST /api/positions", () => {
         level: "",
         department_id: currentDepartment.id,
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(400);
     expect(response.body.errors).toBeDefined();
@@ -93,7 +93,7 @@ describe("GET /api/positions/:positionId", () => {
   it("should return correct position data", async () => {
     const response = await supertest(web)
       .get(`/api/positions/${currentPosition.id}`)
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(200);
     expect(response.body.data.name).toBe("HR Staff");
@@ -103,7 +103,7 @@ describe("GET /api/positions/:positionId", () => {
   it("should return 404 if the position data does not exist", async () => {
     const response = await supertest(web)
       .get("/api/positions/1")
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(404);
     expect(response.body.errors).toBeDefined();
@@ -132,7 +132,7 @@ describe("PUT /api/positions/:positionId", () => {
         name: "HR Staff edit",
         level: "Staff edit",
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(200);
     expect(response.body.data.name).toBe("HR Staff edit");
@@ -147,7 +147,7 @@ describe("PUT /api/positions/:positionId", () => {
         level: "Staff",
         department_id: currentPosition.department_id,
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     const response = await supertest(web)
       .put(`/api/positions/${currentPosition.id}`)
@@ -155,7 +155,7 @@ describe("PUT /api/positions/:positionId", () => {
         name: "IT Staff",
         level: "Staff",
       })
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(400);
     expect(response.body.errors).toBeDefined();
@@ -180,7 +180,7 @@ describe("DELETE /api/positions/:positionId", () => {
   it("should return 200 and remove position successfully", async () => {
     const response = await supertest(web)
       .delete(`/api/positions/${currentPosition.id}`)
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("Position deleted successfully.");
@@ -189,7 +189,7 @@ describe("DELETE /api/positions/:positionId", () => {
   it("should return 404 if the position to delete does not exist", async () => {
     const response = await supertest(web)
       .delete("/api/positions/1")
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(404);
     expect(response.body.errors).toBe(
@@ -215,7 +215,7 @@ describe("GET /api/positions", () => {
 
     const response = await supertest(web)
       .get("/api/positions")
-      .set("Authorization", "test");
+      .set("Authorization", "testhr");
 
     expect(response.status).toBe(200);
     expect(response.body.data.length).toBe(1);

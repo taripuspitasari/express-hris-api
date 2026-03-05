@@ -13,10 +13,10 @@ export class UserTest {
   }
 
   static async create() {
-    await prismaClient.user.create({
+    return await prismaClient.user.create({
       data: {
         password: await bcrypt.hash("test_123", 10),
-        token: "test",
+        token: "testuser",
         person: {
           create: {
             fullname: "Test User",
@@ -43,9 +43,9 @@ export class UserTest {
     return await prismaClient.user.create({
       data: {
         password: await bcrypt.hash("test_123", 10),
-        token: "test",
+        token: "testhr",
         person: {
-          create: {fullname: "Test User", email: "test@gmail.com"},
+          create: {fullname: "Test User", email: "testupdate@gmail.com"},
         },
         roles: {
           create: [

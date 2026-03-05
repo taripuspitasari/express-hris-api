@@ -3,7 +3,7 @@ import {Department} from "@prisma/client";
 export type DepartmentResponse = {
   id: number;
   name: string;
-  description: string;
+  description?: string;
 };
 
 export type CreateDepartmentRequest = {

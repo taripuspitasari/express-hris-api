@@ -63,7 +63,6 @@ export function toEmployeeResponse(
     department: {
       id: employee.department.id,
       name: employee.department.name,
-      description: employee.department.description,
     },
     position: {
       id: employee.position.id,

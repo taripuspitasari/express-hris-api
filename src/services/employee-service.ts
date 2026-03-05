@@ -26,7 +26,7 @@ export class EmployeeService {
       },
     });
 
-    if (employeeExist !== 0) {
+    if (employeeExist) {
       throw new ResponseError(400, "This person is already employee.");
     }
 

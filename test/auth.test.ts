@@ -118,7 +118,7 @@ describe("GET /api/auth/me", () => {
   it("should return 200 and the authenticated user's data when token is valid", async () => {
     const response = await supertest(web)
       .get("/api/auth/me")
-      .set("Authorization", "test");
+      .set("Authorization", "testuser");
 
     logger.debug(response.body);
     expect(response.status).toBe(200);
@@ -153,7 +153,7 @@ describe("PATCH /api/auth/update-profile", () => {
   it("should return 200 and update the user's data when token and input are valid", async () => {
     const response = await supertest(web)
       .patch("/api/auth/update-profile")
-      .set("Authorization", "test")
+      .set("Authorization", "testuser")
       .send({
         email: "testupdate@gmail.com",
         fullname: "test update",
@@ -176,7 +176,7 @@ describe("PATCH /api/auth/update-profile", () => {
   it("should return 400 when the request body is invalid", async () => {
     const response = await supertest(web)
       .patch("/api/auth/update-profile")
-      .set("Authorization", "test")
+      .set("Authorization", "testuser")
       .send({
         email: "wrong-email",
         fullname: "",
@@ -214,7 +214,7 @@ describe("PATCH /api/auth/change-password", () => {
   it("should return 200 and change password the user's when token and input are valid", async () => {
     const response = await supertest(web)
       .patch("/api/auth/change-password")
-      .set("Authorization", "test")
+      .set("Authorization", "testuser")
       .send({
         old_password: "test_123",
         new_password: "test_678",
@@ -226,7 +226,7 @@ describe("PATCH /api/auth/change-password", () => {
 
     const checkMe = await supertest(web)
       .get("/api/auth/me")
-      .set("Authorization", "test");
+      .set("Authorization", "testuser");
 
     logger.debug(response.body);
     expect(checkMe.status).toBe(401);
@@ -235,7 +235,7 @@ describe("PATCH /api/auth/change-password", () => {
   it("should return 401 when the request body is invalid", async () => {
     const response = await supertest(web)
       .patch("/api/auth/change-password")
-      .set("Authorization", "test")
+      .set("Authorization", "testuser")
       .send({
         old_password: "wrong_123",
         new_password: "test_678",
@@ -274,7 +274,7 @@ describe("DELETE /api/auth/logout", () => {
   it("should return 200 and successfully log out the user when token is valid", async () => {
     const response = await supertest(web)
       .delete("/api/auth/logout")
-      .set("Authorization", "test");
+      .set("Authorization", "testuser");
 
     logger.debug(response.body);
     expect(response.status).toBe(200);
@@ -282,7 +282,7 @@ describe("DELETE /api/auth/logout", () => {
 
     const checkMe = await supertest(web)
       .get("/api/auth/me")
-      .set("Authorization", "test");
+      .set("Authorization", "testuser");
 
     logger.debug(response.body);
     expect(checkMe.status).toBe(401);
