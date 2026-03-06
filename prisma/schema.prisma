@@ -32,11 +32,18 @@ model User {
 model Attendance {
   id             Int       @id @default(autoincrement())
   employee_id    Int
-  employee       Employee  @relation(fields: [employee_id], references: [id])
-  check_in_time  DateTime
-  check_out_time DateTime?
   date           DateTime
+  check_in_time  DateTime?
+  check_out_time DateTime?
+  status         String    @default("present") // present, absent, on_leave
+  is_late        Boolean   @default(false)
+  late_duration  Int       @default(0)
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @default(now()) @updatedAt
 
+  employee Employee @relation(fields: [employee_id], references: [id])
+
+  @@unique([employee_id, date])
   @@map("attendances")
 }
 

@@ -101,14 +101,15 @@ apiRouter.delete(
   EmployeeController.offboard,
 );
 
-apiRouter.get("/api/users/current", AuthController.get);
-apiRouter.patch("/api/users/current", AuthController.updatePassword);
-apiRouter.delete("/api/users/current", AuthController.logout);
-
+apiRouter.get("/api/attendance", AttendanceController.get);
 apiRouter.post("/api/attendance/check-in", AttendanceController.checkIn);
 apiRouter.post("/api/attendance/check-out", AttendanceController.checkOut);
 apiRouter.get("/api/attendance/history", AttendanceController.history);
-apiRouter.get("/api/attendance", AttendanceController.get);
+apiRouter.get(
+  "/api/hr/attendance/report",
+  authorizeMiddleware("view_attendance"),
+  AttendanceController.report,
+);
 
 apiRouter.post("/api/leaves", LeaveController.create);
 apiRouter.get("/api/leaves", LeaveController.search);
