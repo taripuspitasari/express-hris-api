@@ -1,5 +1,7 @@
 import {prismaClient} from "../../src/application/database";
 import bcrypt from "bcrypt";
+import {PositionTest} from "./position";
+import {EmployeeTest} from "./employee";
 
 export class UserTest {
   static async delete() {
@@ -58,5 +60,16 @@ export class UserTest {
         },
       },
     });
+  }
+
+  static async createWithEmployee() {
+    const currentUser = await this.create();
+    const currentPosition = await PositionTest.create();
+    await EmployeeTest.create(
+      currentUser.person_id,
+      currentPosition.department_id,
+      currentPosition.id,
+    );
+    return currentUser;
   }
 }

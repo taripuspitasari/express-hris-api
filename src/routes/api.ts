@@ -107,7 +107,7 @@ apiRouter.post("/api/attendance/check-out", AttendanceController.checkOut);
 apiRouter.get("/api/attendance/history", AttendanceController.history);
 apiRouter.get(
   "/api/hr/attendance/report",
-  authorizeMiddleware("view_attendance"),
+  authorizeMiddleware("view_attendance_report"),
   AttendanceController.report,
 );
 
