@@ -30,7 +30,6 @@ export class AttendanceController {
 
   static async history(req: UserRequest, res: Response, next: NextFunction) {
     try {
-      // const page = req.query.page ? Number(req.query.page) : 1;
       const request: SearchAttendanceRequest = {
         ...req.query,
         user_id: req.user?.id,

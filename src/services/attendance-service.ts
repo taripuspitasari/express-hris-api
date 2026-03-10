@@ -9,34 +9,11 @@ import {ResponseError} from "../error/response-error";
 import {Pageable} from "../models/page";
 import {Validation} from "../validations/validation";
 import {AttendanceValidation} from "../validations/attendance-validation";
+import {EmployeeService} from "./employee-service";
 
 export class AttendanceService {
-  private static async getEmployeeId(userId: number): Promise<number> {
-    const user = await prismaClient.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!user) {
-      throw new ResponseError(404, "User not found");
-    }
-
-    const employee = await prismaClient.employee.findUnique({
-      where: {
-        person_id: user.person_id,
-      },
-    });
-
-    if (!employee) {
-      throw new ResponseError(404, "The user is not registered as an employee");
-    }
-
-    return employee.id;
-  }
-
   static async checkIn(user: User): Promise<AttendanceResponse> {
-    const employeeId = await this.getEmployeeId(user.id);
+    const employeeId = await EmployeeService.getEmployeeId(user.id);
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const existingAttendance = await prismaClient.attendance.findUnique({
@@ -79,7 +56,7 @@ export class AttendanceService {
   }
 
   static async checkOut(user: User): Promise<AttendanceResponse> {
-    const employeeId = await this.getEmployeeId(user.id);
+    const employeeId = await EmployeeService.getEmployeeId(user.id);
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
@@ -110,7 +87,7 @@ export class AttendanceService {
   }
 
   static async get(user: User): Promise<AttendanceResponse | null> {
-    const employeeId = await this.getEmployeeId(user.id);
+    const employeeId = await EmployeeService.getEmployeeId(user.id);
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
@@ -136,7 +113,7 @@ export class AttendanceService {
     const skip = (searchRequest.page - 1) * searchRequest.size;
     const filters: any = {
       ...(searchRequest.user_id && {
-        employee_id: await this.getEmployeeId(searchRequest.user_id),
+        employee_id: await EmployeeService.getEmployeeId(searchRequest.user_id),
       }),
       ...(searchRequest.employee_number && {
         employee_number: searchRequest.employee_number,

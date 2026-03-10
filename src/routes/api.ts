@@ -4,7 +4,6 @@ import {authorizeMiddleware} from "../middlewares/authorize-middleware";
 import {AuthController} from "../controllers/auth-controller";
 import {AttendanceController} from "../controllers/attendance-controller";
 import {DepartmentController} from "../controllers/department-controller";
-import {hrRouter} from "./hr-router";
 import {LeaveController} from "../controllers/leave-controller";
 import {PositionController} from "../controllers/position-controller";
 import {EmployeeController} from "../controllers/employee-controller";
@@ -112,6 +111,15 @@ apiRouter.get(
 );
 
 apiRouter.post("/api/leaves", LeaveController.create);
-apiRouter.get("/api/leaves", LeaveController.search);
 apiRouter.get("/api/leave/:leaveId", LeaveController.get);
-// apiRouter.use("/api/hr", hrRouter);
+apiRouter.get("/api/leaves/history", LeaveController.history);
+apiRouter.get(
+  "/api/leaves/report",
+  authorizeMiddleware("view_leave_report"),
+  LeaveController.search,
+);
+apiRouter.put(
+  "/api/leaves/:leaveId/status",
+  authorizeMiddleware("approve_leave"),
+  LeaveController.approve,
+);

@@ -4,9 +4,9 @@ export type ProfileResponse = {
   id: number;
   fullname: string;
   email: string;
-  phone: string | null;
-  gender: string | null;
-  birth_date: string | null;
+  phone?: string | null;
+  gender?: string | null;
+  birth_date?: string | null;
 };
 
 export function toPersonResponse(person: Person): ProfileResponse {

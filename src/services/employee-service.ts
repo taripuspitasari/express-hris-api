@@ -237,4 +237,25 @@ export class EmployeeService {
       },
     };
   }
+
+  static async getEmployeeId(userId: number): Promise<number> {
+    const employee = await prismaClient.employee.findFirst({
+      where: {
+        person: {
+          user: {
+            id: userId,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!employee) {
+      throw new ResponseError(404, "The user is not registered as an employee");
+    }
+
+    return employee.id;
+  }
 }

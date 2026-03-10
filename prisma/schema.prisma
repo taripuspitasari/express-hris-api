@@ -83,19 +83,22 @@ model Employee {
 }
 
 model Leave {
-  id          Int       @id @default(autoincrement())
-  employee_id Int
-  employee    Employee  @relation("EmployeeLeaves", fields: [employee_id], references: [id])
-  type        String
-  start_date  DateTime
-  end_date    DateTime
-  total_days  Int
-  status      String    @default("pending")
-  approvedBy  Int?
-  approver    Employee? @relation("ApprovedLeaves", fields: [approvedBy], references: [id])
-  approvedAt  DateTime?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @default(now()) @updatedAt
+  id               Int       @id @default(autoincrement())
+  employee_id      Int
+  type             String // ANNUAL SICK PERSONAL UNPAID
+  start_date       DateTime
+  end_date         DateTime
+  total_days       Int
+  status           String    @default("pending") // PENDING APPROVED REJECTED
+  reason           String    @db.Text
+  rejection_reason String?   @db.Text
+  approved_by      Int?
+  approved_at      DateTime?
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @default(now()) @updatedAt
+
+  employee Employee  @relation("EmployeeLeaves", fields: [employee_id], references: [id])
+  approver Employee? @relation("ApprovedLeaves", fields: [approved_by], references: [id])
 
   @@map("leaves")
 }

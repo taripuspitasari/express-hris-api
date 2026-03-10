@@ -1,5 +1,4 @@
-import {Department, Employee, Leave, User} from "@prisma/client";
-import {EmployeeResponse, toEmployeeResponse} from "./employee-model";
+import {Department, Employee, Leave, Person} from "@prisma/client";
 
 export type LeaveResponse = {
   id: number;
@@ -7,62 +6,75 @@ export type LeaveResponse = {
   start_date: Date;
   end_date: Date;
   total_days: number;
+  reason: string;
   status: string;
-};
-
-export type LeaveDetailResponse = {
-  id: number;
-  employee: EmployeeResponse;
-  type: string;
-  start_date: Date;
-  end_date: Date;
-  total_days: number;
-  status: string;
-  approver?: EmployeeResponse | null;
-  approvedAt?: Date | null;
+  created_at: Date;
+  rejection_reason?: string | null;
+  approved_at?: Date | null;
+  employee: {
+    id: number;
+    employee_number: string;
+    fullname: string;
+    department: string;
+  };
+  approver?: {
+    id: number;
+    fullname: string;
+  } | null;
 };
 
 export type CreateLeaveRequest = {
   user_id: number;
-  start_date: string;
-  end_date: string;
-  total_days: number;
   type: string;
+  start_date: Date;
+  end_date: Date;
+  reason: string;
 };
 
 export type SearchLeaveRequest = {
+  user_id?: number;
+  fullname?: string;
   type?: string;
   status?: string;
   page: number;
   size: number;
 };
 
-export function toLeaveResponse(leave: Leave): LeaveResponse {
-  return {
-    id: leave.id,
-    type: leave.type,
-    start_date: leave.start_date,
-    end_date: leave.end_date,
-    total_days: leave.total_days,
-    status: leave.status,
-  };
-}
+export type ApproveLeaveRequest = {
+  id: number;
+  user_id: number;
+  status: string;
+  rejection_reason?: string;
+};
 
-export function toLeaveDetailResponse(
+export function toLeaveResponse(
   leave: Leave & {
-    employee: Employee & {user: User; department: Department};
-    approver: (Employee & {user: User; department: Department}) | null;
-  }
-): LeaveDetailResponse {
+    employee: Employee & {person: Person; department: Department};
+    approver?: (Employee & {person: Person}) | null;
+  },
+): LeaveResponse {
   return {
     id: leave.id,
-    employee: toEmployeeResponse(leave.employee),
     type: leave.type,
     start_date: leave.start_date,
     end_date: leave.end_date,
     total_days: leave.total_days,
     status: leave.status,
-    approver: leave.approver ? toEmployeeResponse(leave.approver) : null,
-    approvedAt: leave.approvedAt ?? undefined,
+    reason: leave.reason,
+    rejection_reason: leave.rejection_reason,
+    created_at: leave.created_at,
+    approved_at: leave.approved_at,
+    employee: {
+      id: leave.employee.id,
+      employee_number: leave.employee.employee_number,
+      fullname: leave.employee.person.fullname,
+      department: leave.employee.department.name,
+    },
+    approver: leave.approver
+      ? {
+          id: leave.approver.id,
+          fullname: leave.approver.person.fullname,
+        }
+      : null,
   };
 }

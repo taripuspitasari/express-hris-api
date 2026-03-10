@@ -82,7 +82,7 @@ describe("POST /api/attendance/check-out", () => {
     await AttendanceTest.deleteAll();
     await UserTest.delete();
     currentUser = await UserTest.createWithEmployee();
-    await AttendanceTest.checkIn(currentUser.id, new Date("2026-03-07"));
+    await AttendanceTest.checkIn(currentUser.id, new Date());
   });
 
   afterEach(async () => {
