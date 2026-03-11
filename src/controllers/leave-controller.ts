@@ -77,7 +77,7 @@ export class LeaveController {
       const response = await LeaveService.approve(request);
       res.status(200).json({
         data: response,
-        message: "Updated successfully",
+        message: "Leave request updated successfully",
       });
     } catch (err) {
       next(err);

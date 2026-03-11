@@ -9,7 +9,7 @@ export class AttendanceController {
       const response = await AttendanceService.checkIn(req.user!);
       res.status(200).json({
         data: response,
-        message: "Check-in successful.",
+        message: "Check-in successful",
       });
     } catch (err) {
       next(err);
@@ -21,7 +21,7 @@ export class AttendanceController {
       const response = await AttendanceService.checkOut(req.user!);
       res.status(200).json({
         data: response,
-        message: "Check-out successful.",
+        message: "Check-out successful",
       });
     } catch (err) {
       next(err);
