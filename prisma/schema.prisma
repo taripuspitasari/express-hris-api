@@ -67,7 +67,7 @@ model Employee {
   position_id     Int
   employee_number String
   join_date       DateTime
-  status          String
+  status          String // active on_leave inactive
   created_at      DateTime  @default(now())
   updated_at      DateTime  @default(now()) @updatedAt
   deleted_at      DateTime?
