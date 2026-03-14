@@ -53,7 +53,6 @@ Request Header:
 
 ```json
 {
-  "user_id": 5,
   "type": "annual_leave",
   "start_date": "2026-03-20",
   "end_date": "2026-03-22",
@@ -106,7 +105,6 @@ Request Header:
 
 ```json
 {
-  "id": 12,
   "status": "rejected",
   "rejection_reason": "Tanggal tersebut sedang ada deadline project"
 }

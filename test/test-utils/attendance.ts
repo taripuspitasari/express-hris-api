@@ -1,14 +1,7 @@
 import {prismaClient} from "../../src/application/database";
+import {EmployeeTest} from "./employee";
 
 export class AttendanceTest {
-  private static async getEmployeeId(userId: number) {
-    const employee = await prismaClient.employee.findFirst({
-      where: {person: {user: {id: userId}}},
-    });
-    if (!employee) throw new Error("Employee not found for test user");
-    return employee.id;
-  }
-
   static async deleteAll() {
     await prismaClient.attendance.deleteMany({});
     await prismaClient.employee.deleteMany({});
@@ -21,7 +14,7 @@ export class AttendanceTest {
     date: Date,
     checkInTime: Date | null = new Date(),
   ) {
-    const employeeId = await this.getEmployeeId(userId);
+    const employeeId = await EmployeeTest.getEmployeeId(userId);
     const dateOnly = new Date(
       date.getFullYear(),
       date.getMonth(),

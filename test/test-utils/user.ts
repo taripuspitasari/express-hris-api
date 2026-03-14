@@ -62,6 +62,17 @@ export class UserTest {
     });
   }
 
+  static async createRoleWithEmployee(roleName: string) {
+    const currentUser = await this.createWithRole(roleName);
+    const currentPosition = await PositionTest.create();
+    await EmployeeTest.create(
+      currentUser.person_id,
+      currentPosition.department_id,
+      currentPosition.id,
+    );
+    return currentUser;
+  }
+
   static async createWithEmployee() {
     const currentUser = await this.create();
     const currentPosition = await PositionTest.create();

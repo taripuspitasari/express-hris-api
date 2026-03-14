@@ -72,7 +72,7 @@ export class LeaveService {
     const searchRequest = Validation.validate(LeaveValidation.SEARCH, request);
     const skip = (searchRequest.page - 1) * searchRequest.size;
 
-    const filters = {
+    const filters: any = {
       ...(searchRequest.user_id && {
         employee_id: await EmployeeService.getEmployeeId(searchRequest.user_id),
       }),
@@ -124,7 +124,7 @@ export class LeaveService {
 
   static async get(id: number): Promise<LeaveResponse> {
     const result = await prismaClient.leave.findFirst({
-      where: {id},
+      where: {id: id},
       include: {
         employee: {
           include: {
@@ -136,7 +136,7 @@ export class LeaveService {
     });
 
     if (!result) {
-      throw new ResponseError(404, "Employee not found.");
+      throw new ResponseError(404, "Leave not found");
     }
 
     return toLeaveResponse(result);

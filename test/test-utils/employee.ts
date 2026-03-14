@@ -1,6 +1,14 @@
 import {prismaClient} from "../../src/application/database";
 
 export class EmployeeTest {
+  static async getEmployeeId(userId: number) {
+    const employee = await prismaClient.employee.findFirst({
+      where: {person: {user: {id: userId}}},
+    });
+    if (!employee) throw new Error("Employee not found for test user");
+    return employee.id;
+  }
+
   static async delete() {
     await prismaClient.employee.deleteMany({});
     await prismaClient.position.deleteMany({});

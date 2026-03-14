@@ -110,16 +110,16 @@ apiRouter.get(
   AttendanceController.report,
 );
 
-apiRouter.post("/api/leaves", LeaveController.create);
-apiRouter.get("/api/leave/:leaveId", LeaveController.get);
 apiRouter.get("/api/leaves/history", LeaveController.history);
 apiRouter.get(
   "/api/leaves/report",
   authorizeMiddleware("view_leave_report"),
   LeaveController.search,
 );
+apiRouter.get("/api/leaves/:leaveId", LeaveController.get);
 apiRouter.put(
   "/api/leaves/:leaveId/status",
   authorizeMiddleware("approve_leave"),
   LeaveController.approve,
 );
+apiRouter.post("/api/leaves", LeaveController.create);
